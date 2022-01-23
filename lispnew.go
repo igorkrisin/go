@@ -467,6 +467,10 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 
 		} else if equalEl(tempEl.data, "define") {
+			if lenList(tempEl) < 2 {
+				return "not enough arguments in func define", false
+			}
+
 			//fmt.Println("define enter")
 			switch el1 := tempEl.nextdata.data.(type) {
 			case string:
@@ -482,6 +486,10 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 				return el1, true
 			}
 		} else if equalEl(tempEl.data, "let") {
+			if lenList(tempEl) < 2 {
+				return "not enough arguments in func let", false
+			}
+
 			elem, mess := eval(tempEl.nextdata.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -513,6 +521,10 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			return elem, true
 
 		} else if equalEl(tempEl.data, "progn") {
+			if lenList(tempEl) < 3 {
+				return "not enough arguments in func progn", false
+			}
+
 			fmt.Println("Progn")
 
 			for tempEl != nil {
@@ -533,6 +545,10 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		// (define foo 42)
 		switch el1 := tempEl.data.(type) {
 		case *list:
+			if lenList(tempEl) < 3 {
+				return "not enough arguments in func lambda", false
+			}
+
 			var clue interface{} = el1.nextdata.data
 			var val *list = tempEl.nextdata
 			if equalEl(el1.data, "lambda") {
