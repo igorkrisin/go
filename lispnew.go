@@ -535,6 +535,12 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 				fmt.Print("elem: ")
 				fmt.Println(elem)
 				fmt.Println("")
+				fmt.Print("clue: ")
+				printList(clue)
+				fmt.Println("")
+				fmt.Print("val: ")
+				printList(val)
+				fmt.Println("")
 				if !mess {
 					return elem, mess
 				}
