@@ -418,6 +418,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 
 		} else if equalEl(tempEl.data, "list") {
+			if lenList(tempEl) < 3 {
+				return "not enough arguments in func list", false
+			}
 			//tempEl = tempEl.nextdata
 			/* fmt.Print("tempEldata: ")
 			printList(tempEl.data)
@@ -442,6 +445,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			return listReverse(tempList)  */
 		} else if equalEl(tempEl.data, "null") {
+			if lenList(tempEl) < 2 {
+				return "not enough arguments in func null", false
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -532,16 +538,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if equalEl(el1.data, "lambda") {
 
 				elem, mess := eval(el1.nextdata.nextdata.data, dict)
-				fmt.Print("elem: ")
-				fmt.Println(elem)
-				fmt.Println("")
-				fmt.Print("clue: ")
-				printList(clue)
-				fmt.Println("")
-				fmt.Print("val: ")
-				printList(val)
-				fmt.Println("")
 				if !mess {
+					fmt.Print("ERROR: ")
 					return elem, mess
 				}
 				switch el3 := clue.(type) {
@@ -557,7 +555,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 								fmt.Print("dict: ")
 								printList(dict)
 								fmt.Println("")
-								
+
 							}
 						}
 						val = val.nextdata
@@ -645,7 +643,7 @@ func main() {
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
 
-	elem, mess := eval(parse(tokenize("(list(define sq (lambda (y) (* (* y y) y))) (sq 3))")), dict)
+	elem, mess := eval(parse(tokenize("(null (quote()))")), dict)
 	if !mess {
 		fmt.Println(elem)
 		fmt.Println("Error return eval")
@@ -657,7 +655,7 @@ func main() {
 
 	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
 	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
-	//(list(define x (lambda (y) 25)) (x 13) square
+	//(list(define x (lambda (y) 25)) (x 13)
 	//(list(define cudr (lambda (y)(cdr y))) (cudr (1 2 3 4 5))) cdr
 	//(list(define sq (lambda (y) (* (* y y) y))) (sq 3))
 	//fmt.Println(structVar1, structVar2, structVar3)
