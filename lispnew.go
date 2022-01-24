@@ -72,7 +72,7 @@ func lenList(xs *list) int {
 	return count
 }
 
-func parse(arr []string) interface{} {
+func parse(arr []string) (interface{}, bool) {
 	var stack *list = nil
 	for i := 0; i < len(arr); i++ {
 		if !equalEl(arr[i], ")") {
@@ -100,7 +100,7 @@ func parse(arr []string) interface{} {
 	}
 	printList(stack)
 	fmt.Println("\n", "return: ")
-	return stack.data //некий костыль
+	return stack.data, true //некий костыль
 }
 
 func tokenize(data string) []string {
@@ -658,13 +658,18 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-
-	elem, mess := eval(parse(tokenize("(null (quote()))")), dict)
-	if !mess {
-		fmt.Println(elem)
-		fmt.Println("Error return eval")
+	elem2,mess2 := parse(tokenize("(null (quote()))"))
+	if !mess2 {
+		fmt.Println(elem2)
+		fmt.Println("Error return parse")
 	} else {
-		printList(elem)
+		elem, mess := eval(elem2, dict)
+		if !mess {
+			fmt.Println(elem)
+			fmt.Println("Error return eval")
+		} else {
+			printList(elem)
+		}
 	}
 
 	// todo: поменять типы го на типы лист, модифиц парсер, что бы он возвращал 2 значения и реагировал на незакрытые скобки
