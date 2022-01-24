@@ -490,10 +490,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 				printList(tempEl.nextdata.nextdata.data)
 				fmt.Println("") */
 				global[el1] = tempEl.nextdata.nextdata.data
-				/* fmt.Print("el1 define: ")
+				/*  fmt.Print("el1 define: ")
 				fmt.Print(el1)
 				fmt.Println("") */
-
 				return el1, true
 			}
 		} else if equalEl(tempEl.data, "let") {
@@ -556,7 +555,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		// (define foo 42)
 		switch el1 := tempEl.data.(type) {
 		case *list:
-			if lenList(tempEl) < 3 {
+			if lenList(tempEl) < 2 {
 				return "not enough arguments in func lambda", false
 			}
 
@@ -565,6 +564,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if equalEl(el1.data, "lambda") {
 
 				elem, mess := eval(el1.nextdata.nextdata.data, dict)
+				printList(clue)
+				printList(val)
 				if !mess {
 					fmt.Print("ERROR: ")
 					return elem, mess
@@ -638,7 +639,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		if err2 == true {
 			return h, true
 		} else {
-
+			//printList(h)
+			//fmt.Println("err2", err2)
 			return "variable " + tempEl + " is not defindet", err2
 			//fmt.Println("")
 		}
@@ -669,7 +671,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2,mess2 := parse(tokenize("(null (quote()))"))
+	elem2,mess2 := parse(tokenize("(list(define sq (lambda (y) (* (* y y) y))) (sq 3))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
