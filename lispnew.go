@@ -74,7 +74,15 @@ func lenList(xs *list) int {
 
 func parse(arr []string) (interface{}, bool) {
 	var stack *list = nil
+	count := 0
+	count2 := 0
 	for i := 0; i < len(arr); i++ {
+		if equalEl(arr[i], ")"){
+			fmt.Println()
+			count++
+		} else if equalEl(arr[i], "("){
+			count2++
+		} 
 		if !equalEl(arr[i], ")") {
 			j, err := strconv.Atoi(arr[i])
 			fmt.Println("Atoi: ", j, err, arr[i])
@@ -96,10 +104,13 @@ func parse(arr []string) (interface{}, bool) {
 			}
 			stack = stack.nextdata
 			stack = &list{data: tempList, nextdata: stack}
-		}
+		} 
+	}
+	if count != count2 {
+		return "error parenthesses", false
 	}
 	printList(stack)
-	fmt.Println("\n", "return: ")
+	fmt.Println("\n", "return parse: ")
 	return stack.data, true //некий костыль
 }
 
@@ -659,6 +670,7 @@ func main() {
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
 	elem2,mess2 := parse(tokenize("(null (quote()))"))
+	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
 		fmt.Println("Error return parse")
