@@ -534,18 +534,15 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func progn", false
 			}
-
-			fmt.Println("Progn")
-
 			for tempEl != nil {
-				fmt.Println("Progn while")
-				elem, mess := eval(tempEl.data, dict)
-				if !mess {
-					return elem, mess
-				}
+
 				eval(tempEl.data, dict)
 				tempEl = tempEl.nextdata
 				if tempEl.nextdata == nil {
+					elem, mess := eval(tempEl.data, dict)
+					if !mess {
+						return elem, mess
+					}
 					return elem, true
 				}
 
