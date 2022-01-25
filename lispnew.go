@@ -77,12 +77,12 @@ func parse(arr []string) (interface{}, bool) {
 	count := 0
 	count2 := 0
 	for i := 0; i < len(arr); i++ {
-		if equalEl(arr[i], ")"){
+		if equalEl(arr[i], ")") {
 			fmt.Println()
 			count++
-		} else if equalEl(arr[i], "("){
+		} else if equalEl(arr[i], "(") {
 			count2++
-		} 
+		}
 		if !equalEl(arr[i], ")") {
 			j, err := strconv.Atoi(arr[i])
 			fmt.Println("Atoi: ", j, err, arr[i])
@@ -104,7 +104,7 @@ func parse(arr []string) (interface{}, bool) {
 			}
 			stack = stack.nextdata
 			stack = &list{data: tempList, nextdata: stack}
-		} 
+		}
 	}
 	if count != count2 {
 		return "error parenthesses", false
@@ -543,7 +543,6 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 				if !mess {
 					return elem, mess
 				}
-
 				eval(tempEl.data, dict)
 				tempEl = tempEl.nextdata
 				if tempEl.nextdata == nil {
@@ -563,34 +562,24 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			var val *list = tempEl.nextdata
 			if equalEl(el1.data, "lambda") {
 
-				elem, mess := eval(el1.nextdata.nextdata.data, dict)
-				printList(clue)
-				printList(val)
-				if !mess {
-					fmt.Print("ERROR: ")
-					return elem, mess
-				}
 				switch el3 := clue.(type) {
 				case *list:
-					fmt.Print("dict2: ")
 					for el3 != nil && val != nil {
 						switch el4 := el3.data.(type) {
 						case string:
 							switch el5 := val.data.(type) {
 							case interface{}:
-
 								dict[el4] = el5
-								fmt.Print("dict: ")
-								printList(dict)
-								fmt.Println("")
-
 							}
 						}
 						val = val.nextdata
 						el3 = el3.nextdata
 
 					}
-					//fmt.Print("eval(el1.nextdata.nextdata.data lambda: ",eval(el1.nextdata.nextdata.data, dict))
+					elem, mess := eval(el1.nextdata.nextdata.data, dict)
+					if !mess {
+						return elem, mess
+					}
 					return elem, true
 				default:
 					return "arguments type is not string lambda", false
@@ -671,7 +660,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2,mess2 := parse(tokenize("(list(define sq (lambda (y) (* (* y y) y))) (sq 3))"))
+	elem2, mess2 := parse(tokenize("(progn (define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
