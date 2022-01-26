@@ -603,7 +603,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 						}
 						val = val.nextdata
 						el3 = el3.nextdata
-
+						printList(val)
+						printList(el3)
 					}
 					elem, mess := eval(el1.nextdata.nextdata.data, dict)
 					if !mess {
@@ -689,7 +690,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("(prong(define append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))"))
+	elem2, mess2 := parse(tokenize("((lambda (x y)(+ x y)) (+ 2 1) 4)"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
@@ -705,7 +706,7 @@ func main() {
 	}
 	//
 
-	// todo: поменять типы го на типы лист, модифиц парсер, что бы он возвращал 2 значения и реагировал на незакрытые скобки
+	//(prong(define append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))
 	//(progn (define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
 	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
 	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
