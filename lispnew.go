@@ -204,7 +204,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func +", false 
 			} else if lenList(tempEl) > 3 {
-			    return "too many arguments in func +", false // todo:  сделать во всех функциях случай когда аргументов много
+			    return "too many arguments in func +", false 
 			}
 			elem, mess := evalList(tempEl.nextdata, dict)
 			if !mess {
@@ -223,8 +223,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "if") {
 			if lenList(tempEl) < 4 {
 				return "not enough arguments in func if", false
-			}else if lenList(tempEl) > 4 {
+			} else if lenList(tempEl) > 4 {
 			    return "too many arguments in func if", false
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -252,10 +253,10 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "cond") {
 			//fmt.Println(lenList(tempEl))
 			if lenList(tempEl) < 2 {
-				return "not enough arguments in func if", false //question: why cond fatal error if count argument < 2
-			}else if lenList(tempEl) > 2 {
-			    return "too many arguments in cond", false
-
+				return "not enough arguments in func cond", false //question: why cond fatal error if count argument < 2
+			} else if lenList(tempEl) > 2 {
+			    return "too many arguments in func cond", false 
+			}
 			for tempEl.nextdata != nil {
 				switch el1 := tempEl.nextdata.data.(type) {
 				case *list:
@@ -287,8 +288,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "-") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func -", false
-			}else if lenList(tempEl) > 3 {
-			    return "too many arguments in func -", false
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func -", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -311,7 +313,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func *", false
 			} else if lenList(tempEl) > 3 {
-			    return "too many arguments in func *", false
+			    return "too many arguments in func *", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -334,7 +337,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func /", false
 			} else if lenList(tempEl) > 3 {
-			    return "too many arguments in func /", false
+			    return "too many arguments in func /", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -358,7 +362,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func =", false
 			} else if lenList(tempEl) > 3 {
-			    return "too many arguments in func =", false
+			    return "too many arguments in func =", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -384,6 +389,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "quote") {
 			if lenList(tempEl) < 1 {
 				return "not enough arguments in func quote", false
+			} else if lenList(tempEl) > 2 {
+			    return "too many arguments in func quote", false 
 			}
 			return tempEl.nextdata.data, true
 
@@ -391,7 +398,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func car", false
 			} else if lenList(tempEl) > 2 {
-			    return "too many arguments in func car", false
+			    return "too many arguments in func car", false 
+			}
 			//fmt.Println("car")
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
@@ -409,7 +417,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func cdr", false
 			} else if lenList(tempEl) > 2 {
-			    return "too many arguments in func cdr", false
+			    return "too many arguments in func cdr", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -425,7 +434,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func cons", false
 			} else if lenList(tempEl) > 3 {
-			    return "too many arguments in func cons", false
+			    return "too many arguments in func cons", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -447,8 +457,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "list") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func list", false
-			} else if lenList(tempEl) > 3 {
-			    return "too many arguments in func list", false
+			}
 			//tempEl = tempEl.nextdata
 			/* fmt.Print("tempEldata: ")
 			printList(tempEl.data)
@@ -476,7 +485,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func null", false
 			} else if lenList(tempEl) > 2 {
-			    return "too many arguments in func null", false
+			    return "too many arguments in func null", false 
+			}
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -517,6 +527,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func let", false
+			} else if lenList(tempEl) > 2 {
+			    return "too many arguments in func let", false 
 			}
 			switch el1 := tempEl.nextdata.data.(type) {
 			case *list:
