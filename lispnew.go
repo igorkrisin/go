@@ -576,7 +576,6 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 					}
 					return elem, true
 				}
-
 			}
 		}
 		// (define foo 42)
@@ -585,11 +584,11 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func lambda", false
 			}
-
+			//fmt.Print("lambda111", "\n")
 			var clue interface{} = el1.nextdata.data
 			var val *list = tempEl.nextdata
 			if equalEl(el1.data, "lambda") {
-
+				//fmt.Print("lambda222", "\n")
 				switch el3 := clue.(type) {
 				case *list:
 				    dict = mapCopy(dict)
@@ -598,14 +597,26 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 						case string:
 							switch el5 := val.data.(type) {
 							case interface{}:
+								//fmt.Print(dict[el4])
 								dict[el4] = el5
 							}
 						}
 						val = val.nextdata
 						el3 = el3.nextdata
-						printList(val)
-						printList(el3)
+						//printList(val)
+						//printList(el3)
 					}
+					switch el6 := el1.nextdata.nextdata.data.(type) {
+					case *list:
+						for  el6.nextdata != nil{
+							switch el7 := el6.nextdata.data.(type) {
+							case string:
+								el6.nextdata.data = dict[el7]
+							}
+							el6 = el6.nextdata
+						}
+					}
+
 					elem, mess := eval(el1.nextdata.nextdata.data, dict)
 					if !mess {
 						return elem, mess
@@ -690,7 +701,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("((lambda (x y)(+ x y)) (+ 2 1) 4)"))
+	elem2, mess2 := parse(tokenize("(prong(define append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
