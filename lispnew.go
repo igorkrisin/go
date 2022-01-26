@@ -167,6 +167,14 @@ func evalList(tempEl *list, dict map[string]interface{}) (interface{}, bool) {
 	return listReverse(tempList), true
 }
 
+func mapCopy(dict map[string]interface{}) map[string]interface{} {
+    var tempDict = make (map[string]interface{})
+    for key, val := range dict {
+	tempDict[key] = val 
+    }
+    return tempDict
+}
+
 /*func evalListRecur(tempEl *list, dict map[string]interface{}) *list {
 	if tempEl != nil {
 		return &list{data: eval(tempEl.data, dict), nextdata: evalListRecur(tempEl.nextdata, dict)}
@@ -182,9 +190,9 @@ func evalList(tempEl *list, dict map[string]interface{}) (interface{}, bool) {
 //(+ x 42)
 
 func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
-	/* fmt.Print("xs: ")
+	fmt.Print("xs: ")
 	printList(xs)
-	fmt.Println("") */
+	fmt.Println("")
 	switch tempEl := xs.(type) {
 	case *list:
 		//fmt.Println("tempEl.data: ")
@@ -194,19 +202,18 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		// false - произошла ошибка
 		if equalEl(tempEl.data, "+") {
 			if lenList(tempEl) < 3 {
-				return "not enough arguments in func +", false //todo: написать код недостатка аргументов для остальных функций
+				return "not enough arguments in func +", false 
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func +", false // todo:  сделать во всех функциях случай когда аргументов много
 			}
-			elem, mess := eval(tempEl.nextdata.data, dict)
+			elem, mess := evalList(tempEl.nextdata, dict)
 			if !mess {
 				return elem, mess
 			}
-			elem2, mess2 := eval(tempEl.nextdata.nextdata.data, dict)
-			if !mess2 {
-				return elem2, mess2
-			}
-			switch el1 := elem.(type) {
+		
+			switch el1 := elem.(*list).data.(type) {
 			case int:
-				switch el2 := elem2.(type) {
+				switch el2 := elem.(*list).nextdata.data.(type) {
 				case int:
 					return el1 + el2, true
 				}
@@ -216,7 +223,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "if") {
 			if lenList(tempEl) < 4 {
 				return "not enough arguments in func if", false
-			}
+			}else if lenList(tempEl) > 4 {
+			    return "too many arguments in func if", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -231,7 +239,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 					}
 					return elem2, true
 				} else if el1 == "false" {
-					elem3, mess3 := eval(tempEl.nextdata.nextdata.nextdata.data, dict) //todo: исправить путем присвоения в нужном месте элементов (не сразу все 3 вподряд)
+					elem3, mess3 := eval(tempEl.nextdata.nextdata.nextdata.data, dict) 
 					if !mess3 {
 						return elem3, mess3
 					}
@@ -245,7 +253,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			//fmt.Println(lenList(tempEl))
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func if", false //question: why cond fatal error if count argument < 2
-			}
+			}else if lenList(tempEl) > 2 {
+			    return "too many arguments in cond", false
 
 			for tempEl.nextdata != nil {
 				switch el1 := tempEl.nextdata.data.(type) {
@@ -278,7 +287,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "-") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func -", false
-			}
+			}else if lenList(tempEl) > 3 {
+			    return "too many arguments in func -", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -300,7 +310,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "*") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func *", false
-			}
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func *", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -322,7 +333,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "/") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func /", false
-			}
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func /", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -345,7 +357,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "=") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func =", false
-			}
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func =", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -377,7 +390,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "car") {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func car", false
-			}
+			} else if lenList(tempEl) > 2 {
+			    return "too many arguments in func car", false
 			//fmt.Println("car")
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
@@ -394,7 +408,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "cdr") {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func cdr", false
-			}
+			} else if lenList(tempEl) > 2 {
+			    return "too many arguments in func cdr", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -409,7 +424,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			//fmt.Println(lenList(tempEl))
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func cons", false
-			}
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func cons", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -431,7 +447,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "list") {
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func list", false
-			}
+			} else if lenList(tempEl) > 3 {
+			    return "too many arguments in func list", false
 			//tempEl = tempEl.nextdata
 			/* fmt.Print("tempEldata: ")
 			printList(tempEl.data)
@@ -458,7 +475,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(tempEl.data, "null") {
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func null", false
-			}
+			} else if lenList(tempEl) > 2 {
+			    return "too many arguments in func null", false
 			elem, mess := eval(tempEl.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -496,30 +514,27 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 				return el1, true
 			}
 		} else if equalEl(tempEl.data, "let") {
+		
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func let", false
 			}
-
-			elem, mess := eval(tempEl.nextdata.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			eval(tempEl.nextdata.nextdata.data, dict)
 			switch el1 := tempEl.nextdata.data.(type) {
 			case *list:
-
+			    dict = mapCopy(dict)
+			//    printList(dict)
 				for el1 != nil {
 					switch el2 := el1.data.(type) {
 					case *list:
 						switch el3 := el2.data.(type) {
 						case string:
-
+				    
 							elem2, mess2 := eval(el2.nextdata.data, dict)
 							if !mess2 {
 								return elem2, mess2
 							}
 
 							dict[el3] = elem2
+							
 						}
 					}
 					el1 = el1.nextdata
@@ -527,6 +542,10 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			default:
 				return "arguments type is not list let", false
 
+			}
+			elem, mess := eval(tempEl.nextdata.nextdata.data, dict)
+			if !mess {
+				return elem, mess
 			}
 			return elem, true
 
@@ -561,6 +580,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 				switch el3 := clue.(type) {
 				case *list:
+				    dict = mapCopy(dict)
 					for el3 != nil && val != nil {
 						switch el4 := el3.data.(type) {
 						case string:
@@ -653,11 +673,11 @@ func main() {
 	printList(&s6) // (6 5 (3 2 1))
 
 	// 5 = (len '(a b c d e)) =(+ (len '(b c d e)) 1) = 4
-
+// (append '(a b c) '(d e)) -> '(a b c d e)
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("(progn (define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))"))
+	elem2, mess2 := parse(tokenize("(prong(define append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
@@ -671,9 +691,10 @@ func main() {
 			printList(elem)
 		}
 	}
+	//
 
 	// todo: поменять типы го на типы лист, модифиц парсер, что бы он возвращал 2 значения и реагировал на незакрытые скобки
-
+	//(progn (define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
 	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
 	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
 	//(list(define x (lambda (y) 25)) (x 13)
