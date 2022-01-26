@@ -505,9 +505,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 				return "arguments type is not list null", false
 			}
 
-		} else if equalEl(tempEl.data, "define") {
+		} else if equalEl(tempEl.data, "defined") {
 			if lenList(tempEl) < 2 {
-				return "not enough arguments in func define", false
+				return "not enough arguments in func defined", false
 			}
 
 			//fmt.Println("define enter")
@@ -562,6 +562,8 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			return elem, true
 
 		} else if equalEl(tempEl.data, "progn") {
+
+			fmt.Print("progn!!!!!!!")
 			if lenList(tempEl) < 3 {
 				return "not enough arguments in func progn", false
 			}
@@ -701,7 +703,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("(prong(define append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))"))
+	elem2, mess2 := parse(tokenize("(null(quote()))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
@@ -717,13 +719,13 @@ func main() {
 	}
 	//
 
-	//(prong(define append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))
-	//(progn (define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
-	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
-	//(list(define len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
-	//(list(define x (lambda (y) 25)) (x 13)
-	//(list(define cudr (lambda (y)(cdr y))) (cudr (1 2 3 4 5))) cdr
-	//(list(define sq (lambda (y) (* (* y y) y))) (sq 3))
+	//(progn(defined append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))
+	//(progn (defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
+	//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
+	//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
+	//(list(defined x (lambda (y) 25)) (x 13)
+	//(list(defined cudr (lambda (y)(cdr y))) (cudr (1 2 3 4 5))) cdr
+	//(list(defined sq (lambda (y) (* (* y y) y))) (sq 3))
 	//fmt.Println(structVar1, structVar2, structVar3)
 	//(cons (quote(a b c)))
 	//(cond((= 3 3)42))
