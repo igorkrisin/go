@@ -596,39 +596,65 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		// (define foo 42)
 		switch el1 := tempEl.data.(type) {
 		case *list:
+			fmt.Print("el1: ")
+			printList(el1)
+			fmt.Println("")
+
 			if lenList(tempEl) < 2 {
 				return "not enough arguments in func lambda", false
 			}
 			//fmt.Print("lambda111", "\n")
 			var clue interface{} = el1.nextdata.data
 			var val *list = tempEl.nextdata
+			fmt.Print("clue: ")
+			printList(clue)
+			fmt.Println("")
+			fmt.Print("val: ")
+			printList(val)
+			fmt.Println("")
 			if equalEl(el1.data, "lambda") {
 				//fmt.Print("lambda222", "\n")
 				switch el3 := clue.(type) {
 				case *list:
+					fmt.Print("el3: ")
+					printList(el3)
+					fmt.Println("")
 					dict = mapCopy(dict)
-					for el3 != nil && val != nil {
+					for el3 != nil {
 						switch el4 := el3.data.(type) {
 						case string:
 							switch el5 := val.data.(type) {
 							case interface{}:
-								//fmt.Print(dict[el4])
-								dict[el4] = el5
+								fmt.Print("el5: ")
+								printList(el5)
+								fmt.Println("")
+								elem2, mess2 := eval(el5, dict)
+								if !mess2 {
+									return elem2, mess2
+								}
+					
+								dict[el4] = elem2
 							}
 						}
 						val = val.nextdata
 						el3 = el3.nextdata
-						//printList(val)
-						//printList(el3)
+						printList(val)
+						printList(el3)
 					}
 					switch el6 := el1.nextdata.nextdata.data.(type) {
 					case *list:
 						for el6.nextdata != nil {
 							switch el7 := el6.nextdata.data.(type) {
 							case string:
+								
 								el6.nextdata.data = dict[el7]
+								fmt.Println("el7: ")
+								printList(el7)
+								fmt.Println("el6: ")
+								printList(el6)
 							}
 							el6 = el6.nextdata
+
 						}
 					}
 
@@ -646,10 +672,16 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		case string:
 
 			j, err := global[el1]
-			elem2, mess2 := evalList(tempEl.nextdata, dict)
+			fmt.Print("tempEl.nextdata: ")
+			printList(tempEl.nextdata)
+			fmt.Println("")
+			 elem2, mess2 := evalList(tempEl.nextdata, dict)
+			 fmt.Print("elem2: ")
+			 printList(elem2)
+			 fmt.Println("")
 			if !mess2 {
 				return elem2, mess2
-			}
+			} 
 
 			elem, mess := eval(&list{data: j, nextdata: elem2.(*list)}, dict)
 			if !mess {
@@ -716,7 +748,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("(progn(defined append(lambda (xs ys)(if (null xs) xs ys)))(append(quote(a b c))(quote(d e))))"))
+	elem2, mess2 := parse(tokenize("(progn(defined append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
@@ -742,6 +774,10 @@ func main() {
 	//fmt.Println(structVar1, structVar2, structVar3)
 	//(cons (quote(a b c)))
 	//(cond((= 3 3)42))
+	//((lambda (x y) (+ x y)) 3 4)
+	//((lambda (x) x) (+ 1 2))
+
+
 	/* var bar interface{}
 	   bar=42
 	   bar = bar.(int) + 1
