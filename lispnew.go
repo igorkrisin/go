@@ -617,16 +617,16 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			
 			
-			//fmt.Print("lambda111", "\n")
-			//var clue interface{} = el1.nextdata.data
-			var actualArgs *list = exp.nextdata
-			/* fmt.Print("clue: ")
-			printList(clue)
-			fmt.Println("")
-			fmt.Print("val: ")
-			printList(val)
-			fmt.Println("") */
-			if equalEl(el1.data, "lambda") {
+				//fmt.Print("lambda111", "\n")
+				//var clue interface{} = el1.nextdata.data
+				var actualArgs *list = exp.nextdata
+				/* fmt.Print("actualArgs: ")
+				printList(actualArgs)
+				fmt.Println("")
+				fmt.Print("exp: ")
+				printList(exp)
+				fmt.Println("")  */
+				if equalEl(el1.data, "lambda") {
 				//fmt.Print("lambda222", "\n")
 				switch formalArgs := el1.nextdata.data.(type) {
 				case *list:
@@ -634,18 +634,19 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 					return "lenght actualArgs not equal lenght formalArgs in lambda", false
 				    }
 					 fmt.Print("formalArgs: ")
-					printList(formalArgs)
-					fmt.Println("") 
-					dict = mapCopy(dict)
+					/* printList(formalArgs)
+					fmt.Println("")  */
+					newDict := make(map[string]interface{})
+					newDict = mapCopy(dict)
 					for formalArgs != nil {
 						switch varName := formalArgs.data.(type) {
 						case string:
 							switch val := actualArgs.data.(type) {
 							case interface{}:
-								fmt.Print("val: ")
+								/* fmt.Print("val: ")
 								printList(val)
-								fmt.Println("") 
-								elem2, mess2 := eval(val, dict)
+								fmt.Println("")  */
+								elem2, mess2 := eval(val, newDict)
 								if !mess2 {
 									return elem2, mess2
 								}
@@ -672,13 +673,13 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			}
 
-		case string:
+			case string:
 
 			j, err := global[el1]
 		
 			
 			if err == false {
-				fmt.Print("сase string global false: ")
+				//fmt.Print("сase string global false: ")
 				return j, false
 			}
 
@@ -695,30 +696,30 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 		    }
 		
 
-		//cons 23 (1 2) -> (23 1 2)
-	case string:
-		if exp == "false" {
-			return "false", true
-		} else if exp == "true" {
-			return "true", true
-		}
-		j, err := dict[exp]
+			//cons 23 (1 2) -> (23 1 2)
+			case string:
+				if exp == "false" {
+					return "false", true
+				} else if exp == "true" {
+					return "true", true
+				}
+				j, err := dict[exp]
 
-		if err != false {
-			return j, true
+				if err != false {
+					return j, true
+				}
+
+			h, err2 := global[exp]
+			if err2 == true {
+				return h, true
+			} else {
+				//printList(h)
+				//fmt.Println("err2", err2)
+				return "variable " + exp + " is not defindet", err2
+				//fmt.Println("")
 		}
 
-		h, err2 := global[exp]
-		if err2 == true {
-			return h, true
-		} else {
-			//printList(h)
-			//fmt.Println("err2", err2)
-			return "variable " + exp + " is not defindet", err2
-			//fmt.Println("")
-		}
-
-	case int:
+		case int:
 		return xs, true
 	}
 	return xs, true
@@ -744,7 +745,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("(progn(defined append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))"))
+	elem2, mess2 := parse(tokenize("(progn(defined append(lambda (bs ys)(if (null bs) ys (append (cdr bs)(cons (car bs)ys)))))(append(quote(a b c))(quote(d e))))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
