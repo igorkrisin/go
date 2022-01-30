@@ -745,7 +745,7 @@ func main() {
 	printList(listReverse(&s6))
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
-	elem2, mess2 := parse(tokenize("(progn(defined append(lambda (bs ys)(if (null bs) ys (append (cdr bs)(cons (car bs)ys)))))(append(quote(a b c))(quote(d e))))"))
+	elem2, mess2 := parse(tokenize("(progn(defined revappend(lambda (bs ys)(if (null bs) ys (revappend (cdr bs)(cons (car bs)ys)))))(revappend(quote(a b c))(quote(d e))))"))
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
@@ -761,7 +761,7 @@ func main() {
 	}
 	//
 
-	//(progn(defined append(lambda (xs ys)(if (null xs) ys (append (cdr xs)(cons (car xs)ys)))))(append(quote(a b c))(quote(d e))))
+	//(progn(defined revappend(lambda (bs ys)(if (null bs) ys (revappend (cdr bs)(cons (car bs)ys)))))(revappend(quote(a b c))(quote(d e))))
 	//(progn (defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
 	//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
 	//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
