@@ -403,7 +403,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			return exp.nextdata.data, true
 
 		} else if equalEl(exp.data, "car") {
+			
 			if lenList(exp) < 2 {
+				fmt.Println("len exp: ",lenList(exp) )
 				return "not enough arguments in func car", false
 			} else if lenList(exp) > 2 {
 				return "too many arguments in func car", false
@@ -412,7 +414,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if !mess {
 				return elem, mess
 			}
-
+			
 			switch el1 := elem.(type) {
 			case *list:
 				return el1.data, true
@@ -682,7 +684,7 @@ func main() {
 	    (define revList(lambda (ys)
 		(if (null ys)
 		ys
-		(append(revList(cdr ys))(car ys)))))
+		(append(revList(cdr ys))(cons(car ys)())))))
 	    (revList(quote(a b c))))`))
 	    
 	    
