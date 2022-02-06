@@ -102,7 +102,6 @@ func parse(arr []string) (interface{}, bool) {
 				fmt.Println("\n", "tempList: ")
 				printList(tempList)
 				stack = stack.nextdata
-				//fmt.Println("stack: ",stack[:len(stack)-1])
 			}
 			stack = stack.nextdata
 			stack = &list{data: tempList, nextdata: stack}
@@ -126,7 +125,7 @@ func tokenize(data string) []string {
 			}
 			arr = append(arr, data[i:i+1])
 			storeStr = ""
-		} else if data[i] == 32/*sp*/ || data[i] == 10/*nl*/ || data[i] == 9 /*ht*/ { //todo convertion integer to literal
+		} else if data[i] == 32/*sp*/ || data[i] == 10/*nl*/ || data[i] == 9 /*ht*/ { //to do convertion integer to literal
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 				storeStr = ""
@@ -232,11 +231,14 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 		} else if equalEl(exp.data, "if") {
 			if lenList(exp) < 4 {
-				fmt.Println("lenList: ",lenList(exp))
-				return "not enough arguments in func if", false // to do разобраться почему не работет количественное определение аргументов  if
+				fmt.Println("lenList<4: ",lenList(exp))
+				return "not enough arguments in func if", false 
 			} else if lenList(exp) > 4 {
+				fmt.Println("lenList>4: ",lenList(exp))
 				return "too many arguments in func if", false
 			}
+
+			fmt.Println("lenList: ",lenList(exp))
 			elem, mess := eval(exp.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -250,7 +252,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 						return elem2, mess2
 					}
 					//fmt.Println("elem2: ")
-					printList(elem2)
+					//printList(elem2)
 					
 					return elem2, true
 				} else if el1 == "false" {
@@ -259,7 +261,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 						return elem3, mess3
 					}
 					//fmt.Println("elem3: ")
-					printList(elem3)
+					//printList(elem3)
 					return elem3, true
 				}
 			default:
@@ -400,7 +402,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					}
 				}
 			default:
-				return "arguments type is not intin func  =", false
+				return "arguments type is not int in func  =", false
 			}
 		} else if equalEl(exp.data, "quote") {
 			if lenList(exp) < 1 {
@@ -413,7 +415,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(exp.data, "car") {
 			
 			if lenList(exp) < 2 {
-				fmt.Println("len exp: ",lenList(exp) )
+				//fmt.Println("len exp: ",lenList(exp) )
 				return "not enough arguments in func car", false
 			} else if lenList(exp) > 2 {
 				return "too many arguments in func car", false
@@ -697,16 +699,16 @@ func main() {
 		    ys
 		    (append(revList(cdr ys))(cons(car ys)(quote()))))))
 	    (define butLast(lambda (ys)
-		(if (=(len ys)  1)
+		(if (= (len(ys))  1)
 		    (quote())
 		    (cons(car ys)(butLast(cdr ys))))))
 	    (define member(lambda(lst x)
 		(if(null lst)
 		    false
-		    (if (=((car lst) x))
+		    (if (= (car lst) x)
 			true
-			(member(cdr lst))))))
-	    (member(quote(a b c)) b))`))//to do изучить трассировку, разобраться в работе  lambda
+			(member(cdr lst)x)))))
+	    (member(quote(1 2 3))(quote 4)))`))//to do изучить трассировку, разобраться в работе  lambda
 	    
 	    
 	    
