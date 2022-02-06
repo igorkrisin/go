@@ -13,9 +13,9 @@ type list struct {
 
 }
 
-func printList(xs interface{}) {
+func printList(expr interface{}) {
 	//fmt.Print("(")
-	switch exp := xs.(type) {
+	switch exp := expr.(type) {
 	case *list:
 		fmt.Print("(")
 		for exp != nil {
@@ -55,20 +55,20 @@ func equalEl(elem interface{}, str string) bool {
 //(1 (2 4)) -> "(" "1" "(" "2" "4" ")" ")"  ->
 //stack: {1 {2, 4}}
 
-func listReverse(xs *list) *list {
+func listReverse(expr *list) *list {
 
 	var tempList *list = nil
-	for xs != nil {
-		tempList = &list{data: xs.data, nextdata: tempList}
-		xs = xs.nextdata
+	for expr != nil {
+		tempList = &list{data: expr.data, nextdata: tempList}
+		expr = expr.nextdata
 	}
 	return tempList
 }
 
-func lenList(xs *list) int {
+func lenList(expr *list) int {
 	count := 0
-	for xs != nil {
-		xs = xs.nextdata
+	for expr != nil {
+		expr = expr.nextdata
 		count++
 	}
 	return count
@@ -121,7 +121,6 @@ func tokenize(data string) []string {
 	arr := []string{}
 	for i := range data {
 		if data[i] == 40 || data[i] == 41 {
-			//fmt.Println("i: ", i)
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 			}
@@ -141,7 +140,6 @@ func tokenize(data string) []string {
 	}
 	fmt.Println("storeStr:", storeStr)
 	fmt.Print("return: ")
-
 	return arr
 }
 
@@ -202,13 +200,13 @@ func printMap(dict map[string]interface{}) {
 
 //(+ x 42)
 
-func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {//to do renmame xs to expr
+func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 	fmt.Print("expr: ")
-	printList(xs)
+	printList(expr)
 	fmt.Println("")
 	printMap(dict)
 	fmt.Println("")
-	switch exp := xs.(type) {
+	switch exp := expr.(type) {
 	case *list:
 		// true - нет ошибок
 		// false - произошла ошибка
@@ -235,7 +233,7 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {//to
 		} else if equalEl(exp.data, "if") {
 			if lenList(exp) < 4 {
 				fmt.Println("lenList: ",lenList(exp))
-				return "not enough arguments in func if", false // todo разобраться почему не работет количественное определение аргументов  if
+				return "not enough arguments in func if", false // to do разобраться почему не работет количественное определение аргументов  if
 			} else if lenList(exp) > 4 {
 				return "too many arguments in func if", false
 			}
@@ -656,9 +654,9 @@ func eval(xs interface{}, dict map[string]interface{}) (interface{}, bool) {//to
 		}
 
 		case int:
-		return xs, true
+		return expr, true
 	}
-	return xs, true
+	return expr, true
 }
 
 // ((lambda (x y) (+ x y)) 3 4)
@@ -701,16 +699,14 @@ func main() {
 	    (define butLast(lambda (ys)
 		(if (=(len ys)  1)
 		    (quote())
-		    
 		    (cons(car ys)(butLast(cdr ys))))))
-	    (define member(lst x)
-		(if(null lst)(if(=((car lst) x)
-		true
-		
-		(member(cdr lst))))
-		false))
-		
-	    (butLast(quote(a b c)) b))`))//to do изучить трассировку, разобраться в работе  lambda
+	    (define member(lambda(lst x)
+		(if(null lst)
+		    false
+		    (if (=((car lst) x))
+			true
+			(member(cdr lst))))))
+	    (member(quote(a b c)) b))`))//to do изучить трассировку, разобраться в работе  lambda
 	    
 	    
 	    
