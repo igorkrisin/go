@@ -118,20 +118,21 @@ func parse(arr []string) (interface{}, bool) {
 func tokenize(data string) []string {
 	storeStr := ""
 	arr := []string{}
-	for i := range data {
-		if data[i] == 40 || data[i] == 41 {
+	dataRune := []rune(data)
+	for i := range dataRune {
+		if string(dataRune[i]) == "(" || string(dataRune[i]) == ")" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 			}
 			arr = append(arr, data[i:i+1])
 			storeStr = ""
-		} else if data[i] == 32/*sp*/ || data[i] == 10/*nl*/ || data[i] == 9 /*ht*/ { //to do convertion integer to literal
+		} else if string(dataRune[i]) == " " || string(dataRune[i]) == "\n" || string(dataRune[i]) == "\t" { 
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 				storeStr = ""
 			}
 		} else {
-			storeStr += data[i : i+1]
+			storeStr += string(dataRune[i : i+1])
 		}
 	}
 	if len(storeStr) != 0 {
