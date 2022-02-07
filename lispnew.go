@@ -391,6 +391,17 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if !mess2 {
 				return elem2, mess2
 			}
+			switch el3 := elem.(type) {
+			case string:
+				switch el4 := elem2.(type) {
+				case string:
+					if el3 == el4 {
+						return "true", true
+					} else {
+						return "false", true
+					}
+				}
+			}
 
 			switch el1 := elem.(type) {
 			case int:
@@ -402,8 +413,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 						return "false", true
 					}
 				}
-			default:
-				return "arguments type is not int in func  =", false
+				
+				default:
+					return "arguments type is not int in func  =", false
 			}
 		} else if equalEl(exp.data, "quote") {
 			if lenList(exp) < 1 {
@@ -709,7 +721,7 @@ func main() {
 		    (if (= (car lst) x)
 			true
 			(member(cdr lst)x)))))
-	    (member(quote(1 2 3))(quote 4)))`))//to do изучить трассировку, разобраться в работе  lambda
+	    (member(quote(a b c))(quote e)))`))//to do изучить трассировку, разобраться в работе  lambda
 	    
 	    
 	    
