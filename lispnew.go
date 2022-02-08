@@ -232,14 +232,14 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 		} else if equalEl(exp.data, "if") {
 			if lenList(exp) < 4 {
-				fmt.Println("lenList<4: ",lenList(exp))
+				//fmt.Println("lenList<4: ",lenList(exp))
 				return "not enough arguments in func if", false 
 			} else if lenList(exp) > 4 {
-				fmt.Println("lenList>4: ",lenList(exp))
+				//fmt.Println("lenList>4: ",lenList(exp))
 				return "too many arguments in func if", false
 			}
 
-			fmt.Println("lenList: ",lenList(exp))
+			//fmt.Println("lenList: ",lenList(exp))
 			elem, mess := eval(exp.nextdata.data, dict)
 			if !mess {
 				return elem, mess
@@ -721,7 +721,13 @@ func main() {
 		    (if (= (car lst) x)
 			true
 			(member(cdr lst)x)))))
-	    (member(quote(a b c))(quote e)))`))//to do изучить трассировку, разобраться в работе  lambda
+	    (define fact(lambda (n)
+		(if(= n 0)
+		    1
+		    (if(= n 1)
+			1
+			(* n (fact (- n 1)))))))
+		(fact 5))`))//to do изучить трассировку, разобраться в работе  lambda
 	    
 	    
 	    
@@ -762,6 +768,14 @@ func main() {
 	   fmt.Println(bar)
 
 	   if = 2 2 (/ 4 2) 42
+
+	    (define member(lambda(lst x)
+		(if(null lst)
+		    false
+		    (if (= (car lst) x)
+			true
+			(member(cdr lst)x)))))
+	    (member(quote(a b c))(quote e)))
 	*/
 
 }
