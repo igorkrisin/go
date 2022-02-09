@@ -216,7 +216,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			} else if lenList(exp) > 3 {
 				return "too many arguments in func +", false
 			}
-			elem, mess := evalList(exp.nextdata, dict)
+			elem, mess := evalList(exp.nextdata, dict)  //change eval to evalList
 			if !mess {
 				return elem, mess
 			}
@@ -273,8 +273,8 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			if lenList(exp) < 2 {
 				return "not enough arguments in func cond", false //question: why cond fatal error if count argument < 2
-			} else if lenList(exp) > 2 {
-				return "too many arguments in func cond", false
+			//} else if lenList(exp) > 2 {
+				//return "too many arguments in func cond", false
 			}
 			for exp.nextdata != nil {
 				switch el1 := exp.nextdata.data.(type) {
@@ -285,9 +285,12 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					}
 					if elem == "false" {
 						exp = exp.nextdata
-						eval(el1.data, dict)
 					} else if elem == "true" {
-						return el1.nextdata.data, true
+					    elem2, mess2 := eval(el1.nextdata.data, dict)
+					    if !mess2 {
+						return elem2, mess2
+					    }
+						return elem2, true
 					}
 				default:
 					return "arguments type not list in func cond", false
@@ -567,9 +570,6 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				return "not enough arguments in func progn", false
 			}
 			for exp != nil {
-
-				eval(exp.data, dict)
-				exp = exp.nextdata
 				if exp.nextdata == nil {
 					elem, mess := eval(exp.data, dict)
 					if !mess {
@@ -577,13 +577,14 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					}
 					return elem, true
 				}
+				exp = exp.nextdata
 			}
 		} 
 		// (define foo 42)
 		switch el1 := exp.data.(type) {
 		case *list:
 			if lenList(el1) != 3 {
-				return "wrong amount of arguments in func lambda", false
+				return "wrong amount of arguments != 3, in func lambda", false
 			}
 				var actualArgs *list = exp.nextdata
 				if equalEl(el1.data, "lambda") {
@@ -712,7 +713,7 @@ func main() {
 		    ys
 		    (append(revList(cdr ys))(cons(car ys)(quote()))))))
 	    (define butLast(lambda (ys)
-		(if (= (len(ys))  1)
+		(if (= (len ys)  1)
 		    (quote())
 		    (cons(car ys)(butLast(cdr ys))))))
 	    (define member(lambda(lst x)
@@ -722,14 +723,20 @@ func main() {
 			true
 			(member(cdr lst)x)))))
 	    (define fact(lambda (n)
-		(if(= n 0)
-		    1
-		    (if(= n 1)
-			1
-			(* n (fact (- n 1)))))))
-		(fact 5))`))//to do изучить трассировку, разобраться в работе  lambda
+		(cond((= n 0) 1)
+		    ((= n 1) 1)
+			(true (* n (fact (- n 1)))))))
+	    (define assoc(lambda(lst key)
+		(if(null lst)
+		    false
+		    (if (= key (cdr(car lst)))
+			(cdr(cdr lst))
+			(assoc(cdr lst))))))
+		(assoc(quote((1 2)(3 4)))3))`))// to do change defindet to defined
+	    //to do find error in finc progn
 	    
 	    
+	    //((a b)(c d)(e f))	    
 	    
 	    
 	fmt.Println(mess2, "\n")
@@ -756,7 +763,6 @@ func main() {
 	//(list(defined sq (lambda (y) (* (* y y) y))) (sq 3))
 	//fmt.Println(structVar1, structVar2, structVar3)
 	//(cons (quote(a b c)))
-	//(cond((= 3 3)42))
 	//((lambda (x y) (+ x y)) 3 4)  (3 4)
 	//((lambda (x) x) (+ 1 2) 8)
 
@@ -776,6 +782,32 @@ func main() {
 			true
 			(member(cdr lst)x)))))
 	    (member(quote(a b c))(quote e)))
+
+		(define fact(lambda (n)
+		(if(= n 0)
+		    1
+		    (if(= n 1)
+			1
+			(* n (fact (- n 1)))))))
+		(fact 5))`))
+		
+		assoc	(cond((null lst) false)
+		    ((= key (cdr(car lst)))(cdr(cdr lst)))
+		    (true(assoc(cdr lst))))))
+		    
+		    progn	for exp != nil {
+
+				eval(exp.data, dict)
+				exp = exp.nextdata
+				if exp.nextdata == nil {
+					elem, mess := eval(exp.data, dict)
+					if !mess {
+						return elem, mess
+					}
+					return elem, true
+				}
+			}
+		
 	*/
 
 }
