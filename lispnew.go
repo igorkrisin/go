@@ -570,14 +570,23 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				return "not enough arguments in func progn", false
 			}
 			for exp != nil {
-				if exp.nextdata == nil {
+				fmt.Print("exp: ")
+				printList(exp)
+				fmt.Println("")
+				//evalList(exp,dict)
+				
+				if exp.nextdata != nil {
+					lst,boo := eval(exp.data, dict)
+					fmt.Println("lst :", lst, boo)
+				exp = exp.nextdata
+				} else {
 					elem, mess := eval(exp.data, dict)
 					if !mess {
 						return elem, mess
 					}
 					return elem, true
 				}
-				exp = exp.nextdata
+				
 			}
 		} 
 		// (define foo 42)
@@ -699,40 +708,7 @@ func main() {
 	elem2, mess2 := parse(tokenize(`
 	
 	
-	(progn
-	    (define append(lambda (bs ys)
-	         (if (null bs)
-	             ys
-	             (cons (car bs)(append (cdr bs)ys)))))
-	    (define len (lambda (y)
-		 (if (null y)
-		  0 
-		  (+ (len(cdr y)) 1))))
-	    (define revList(lambda (ys)
-		(if (null ys)
-		    ys
-		    (append(revList(cdr ys))(cons(car ys)(quote()))))))
-	    (define butLast(lambda (ys)
-		(if (= (len ys)  1)
-		    (quote())
-		    (cons(car ys)(butLast(cdr ys))))))
-	    (define member(lambda(lst x)
-		(if(null lst)
-		    false
-		    (if (= (car lst) x)
-			true
-			(member(cdr lst)x)))))
-	    (define fact(lambda (n)
-		(cond((= n 0) 1)
-		    ((= n 1) 1)
-			(true (* n (fact (- n 1)))))))
-	    (define assoc(lambda(lst key)
-		(if(null lst)
-		    false
-		    (if (= key (cdr(car lst)))
-			(cdr(cdr lst))
-			(assoc(cdr lst))))))
-		(assoc(quote((1 2)(3 4)))3))`))// to do change defindet to defined
+	(progn(+ 1 2)(+ 5 6))`))// to do change defindet to defined
 	    //to do find error in finc progn
 	    
 	    
@@ -807,6 +783,41 @@ func main() {
 					return elem, true
 				}
 			}
+
+
+			(define append(lambda (bs ys)
+	         (if (null bs)
+	             ys
+	             (cons (car bs)(append (cdr bs)ys)))))
+	    (define len (lambda (y)
+		 (if (null y)
+		  0 
+		  (+ (len(cdr y)) 1))))
+	    (define revList(lambda (ys)
+		(if (null ys)
+		    ys
+		    (append(revList(cdr ys))(cons(car ys)(quote()))))))
+	    (define butLast(lambda (ys)
+		(if (= (len ys)  1)
+		    (quote())
+		    (cons(car ys)(butLast(cdr ys))))))
+	    (define member(lambda(lst x)
+		(if(null lst)
+		    false
+		    (if (= (car lst) x)
+			true
+			(member(cdr lst)x)))))
+	    (define fact(lambda (n)
+		(cond((= n 0) 1)
+		    ((= n 1) 1)
+			(true (* n (fact (- n 1)))))))
+	    (define assoc(lambda(lst key)
+		(if(null lst)
+		    false
+		    (if (= key (cdr(car lst)))
+			(cdr(cdr lst))
+			(assoc(cdr lst))))))
+		(assoc(quote((1 2)(3 4)))3)
 		
 	*/
 
