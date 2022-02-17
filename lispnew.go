@@ -126,7 +126,7 @@ func tokenize(data string) []string {
 			}
 			arr = append(arr, data[i:i+1])
 			storeStr = ""
-		} else if string(dataRune[i]) == " " || string(dataRune[i]) == "\n" || string(dataRune[i]) == "\t" { 
+		} else if string(dataRune[i]) == " " || string(dataRune[i]) == "\n" || string(dataRune[i]) == "\t" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 				storeStr = ""
@@ -177,13 +177,13 @@ func mapCopy(dict map[string]interface{}) map[string]interface{} {
 }
 
 func printMap(dict map[string]interface{}) {
-    for key, val := range dict{
-	printList(key)
-	
-	fmt.Print(" : ")
-	printList(val)
-	fmt.Print(" ")
-    }
+	for key, val := range dict {
+		printList(key)
+
+		fmt.Print(" : ")
+		printList(val)
+		fmt.Print(" ")
+	}
 }
 
 /*func evalListRecur(exp *list, dict map[string]interface{}) *list {
@@ -216,7 +216,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			} else if lenList(exp) > 3 {
 				return "too many arguments in func +", false
 			}
-			elem, mess := evalList(exp.nextdata, dict)  //change eval to evalList
+			elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
 			if !mess {
 				return elem, mess
 			}
@@ -233,7 +233,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 		} else if equalEl(exp.data, "if") {
 			if lenList(exp) < 4 {
 				//fmt.Println("lenList<4: ",lenList(exp))
-				return "not enough arguments in func if", false 
+				return "not enough arguments in func if", false
 			} else if lenList(exp) > 4 {
 				//fmt.Println("lenList>4: ",lenList(exp))
 				return "too many arguments in func if", false
@@ -246,16 +246,11 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			switch el1 := elem.(type) {
 			case string:
-			    //fmt.Println("el1: ", el1)
+				//fmt.Println("el1: ", el1)
 				if el1 == "true" {
 					elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-					if !mess2 {
-						return elem2, mess2
-					}
-					//fmt.Println("elem2: ")
-					//printList(elem2)
-					
-					return elem2, true
+
+					return elem2, mess2
 				} else if el1 == "false" {
 					elem3, mess3 := eval(exp.nextdata.nextdata.nextdata.data, dict)
 					if !mess3 {
@@ -270,10 +265,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			}
 		} else if equalEl(exp.data, "cond") {
-
 			if lenList(exp) < 2 {
 				return "not enough arguments in func cond", false //question: why cond fatal error if count argument < 2
-			//} else if lenList(exp) > 2 {
+				//} else if lenList(exp) > 2 {
 				//return "too many arguments in func cond", false
 			}
 			for exp.nextdata != nil {
@@ -286,15 +280,11 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					if elem == "false" {
 						exp = exp.nextdata
 					} else if elem == "true" {
-					    elem2, mess2 := eval(el1.nextdata.data, dict)
-					    if !mess2 {
+						elem2, mess2 := eval(el1.nextdata.data, dict)
 						return elem2, mess2
-					    }
-						return elem2, true
 					}
 				default:
 					return "arguments type not list in func cond", false
-
 				}
 			}
 			/* for exp.nextdata != nil {
@@ -313,18 +303,14 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			} else if lenList(exp) > 3 {
 				return "too many arguments in func -", false
 			}
-			elem, mess := eval(exp.nextdata.data, dict)
+			elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
 			if !mess {
 				return elem, mess
 			}
-			elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-			if !mess2 {
-				return elem2, mess2
-			}
 
-			switch el1 := elem.(type) {
+			switch el1 := elem.(*list).data.(type) {
 			case int:
-				switch el2 := elem2.(type) {
+				switch el2 := elem.(*list).nextdata.data.(type) {
 				case int:
 					return el1 - el2, true
 				}
@@ -361,18 +347,14 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			} else if lenList(exp) > 3 {
 				return "too many arguments in func /", false
 			}
-			elem, mess := eval(exp.nextdata.data, dict)
+			elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
 			if !mess {
 				return elem, mess
 			}
-			elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-			if !mess2 {
-				return elem2, mess2
-			}
 
-			switch el1 := elem.(type) {
+			switch el1 := elem.(*list).data.(type) {
 			case int:
-				switch el2 := elem2.(type) {
+				switch el2 := elem.(*list).nextdata.data.(type) {
 				case int:
 					return el1 / el2, true
 				}
@@ -404,8 +386,8 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 						return "false", true
 					}
 				}
-			}
 
+			}
 			switch el1 := elem.(type) {
 			case int:
 				switch el2 := elem2.(type) {
@@ -416,10 +398,8 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 						return "false", true
 					}
 				}
-				
-				default:
-					return "arguments type is not int in func  =", false
 			}
+			return "false", true
 		} else if equalEl(exp.data, "quote") {
 			if lenList(exp) < 1 {
 				return "not enough arguments in func quote", false
@@ -429,7 +409,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			return exp.nextdata.data, true
 
 		} else if equalEl(exp.data, "car") {
-			
+
 			if lenList(exp) < 2 {
 				//fmt.Println("len exp: ",lenList(exp) )
 				return "not enough arguments in func car", false
@@ -440,7 +420,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			if !mess {
 				return elem, mess
 			}
-			
+
 			switch el1 := elem.(type) {
 			case *list:
 				return el1.data, true
@@ -516,7 +496,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					return "true", true
 				}
 			default:
-				return "arguments type is not list in func null", false 
+				return "arguments type is not list in func null", false
 			}
 
 		} else if equalEl(exp.data, "define") {
@@ -563,8 +543,8 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			return elem, true
 
-		//} else if equalEl
-		
+			//} else if equalEl
+
 		} else if equalEl(exp.data, "progn") {
 			if lenList(exp) < 3 {
 				return "not enough arguments in func progn", false
@@ -574,11 +554,16 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				printList(exp)
 				fmt.Println("")
 				//evalList(exp,dict)
-				
+
 				if exp.nextdata != nil {
-					lst,boo := eval(exp.data, dict)
-					fmt.Println("lst :", lst, boo)
-				exp = exp.nextdata
+					//temp, errSw :=
+					eval(exp.data, dict)
+					/* if !errSw {
+						return temp, false
+					}else { */
+					exp = exp.nextdata
+					//}
+
 				} else {
 					elem, mess := eval(exp.data, dict)
 					if !mess {
@@ -586,23 +571,38 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					}
 					return elem, true
 				}
-				
+
 			}
-		} 
+		} else if equalEl(exp.data, "numberp") {
+			elem, mess := eval(exp.nextdata.data, dict)
+			if !mess {
+				return elem, mess
+			}
+
+			switch el1 := elem.(type) {
+			case int:
+
+				_ = el1
+				return "true", true
+
+			default:
+				return "false", true
+			}
+		}
 		// (define foo 42)
 		switch el1 := exp.data.(type) {
 		case *list:
 			if lenList(el1) != 3 {
 				return "wrong amount of arguments != 3, in func lambda", false
 			}
-				var actualArgs *list = exp.nextdata
-				if equalEl(el1.data, "lambda") {
+			var actualArgs *list = exp.nextdata
+			if equalEl(el1.data, "lambda") {
 				switch formalArgs := el1.nextdata.data.(type) {
 				case *list:
-				    if lenList(actualArgs) != lenList(formalArgs) {
-					return "lenght actualArgs not equal lenght formalArgs in lambda", false
-				    }
-					 fmt.Print("formalArgs: ")
+					if lenList(actualArgs) != lenList(formalArgs) {
+						return "lenght actualArgs not equal lenght formalArgs in lambda", false
+					}
+					fmt.Print("formalArgs: ")
 					newDict := make(map[string]interface{})
 					newDict = mapCopy(dict)
 					for formalArgs != nil {
@@ -617,8 +617,8 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 								newDict[varName] = elem2
 							}
-							default:
-								return "type formal arguments lambda not  string", false
+						default:
+							return "type formal arguments lambda not  string", false
 						}
 						actualArgs = actualArgs.nextdata
 						formalArgs = formalArgs.nextdata
@@ -632,53 +632,50 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					return "arguments type is not list in function lambda", false
 				}
 			}
-			case string:
+		case string:
 
 			j, err := global[el1]
-		
-			
+
 			if err == false {
 				//fmt.Print("сase string global false: ")
-				return "finction " +el1+  " not defined", false
+				return "finction " + el1 + " not defined", false
 			}
 
 			elem, mess := eval(&list{data: j, nextdata: exp.nextdata}, dict)
 			if !mess {
 				return elem, mess
-			
-				
+
 			} else {
 
 				return elem, true
 
 			}
-		    }
-		
-
-			//cons 23 (1 2) -> (23 1 2)
-			case string:
-				if exp == "false" {
-					return "false", true
-				} else if exp == "true" {
-					return "true", true
-				}
-				j, err := dict[exp]
-
-				if err != false {
-					return j, true
-				}
-
-			h, err2 := global[exp]
-			if err2 == true {
-				return h, true
-			} else {
-				//printList(h)
-				//fmt.Println("err2", err2)
-				return "variable " + exp + " is not defindet", err2
-				//fmt.Println("")
 		}
 
-		case int:
+	//cons 23 (1 2) -> (23 1 2)
+	case string:
+		if exp == "false" {
+			return "false", true
+		} else if exp == "true" {
+			return "true", true
+		}
+		j, err := dict[exp]
+
+		if err != false {
+			return j, true
+		}
+
+		h, err2 := global[exp]
+		if err2 == true {
+			return h, true
+		} else {
+			//printList(h)
+			//fmt.Println("err2", err2)
+			return "variable " + exp + " is not defindet", err2
+			//fmt.Println("")
+		}
+
+	case int:
 		return expr, true
 	}
 	return expr, true
@@ -705,16 +702,32 @@ func main() {
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
 	// (butLast '(a)) -> '()
+
 	elem2, mess2 := parse(tokenize(`
 	
 	
-	(progn(+ 1 2)(+ 5 6))`))// to do change defindet to defined
-	    //to do find error in finc progn
-	    
-	    
-	    //((a b)(c d)(e f))	    
-	    
-	    
+	(progn
+		(define pairlis(lambda(lst1 lst2)
+			(if(null lst1)
+				(quote())
+				(cons(list(car lst1)(car lst2))
+			(pairlis(cdr lst1)(cdr lst2))))))
+		(define eval(lambda(lst)
+			(cond((numberp lst) lst)
+				((= (car lst) (quote +)) (+ (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
+				((= (car lst) (quote -)) (- (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
+				((= (car lst) (quote *)) (* (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
+				((= (car lst) (quote /)) (/ (eval(car(cdr lst))) (eval(car(cdr(cdr lst)))))))))
+			
+	(eval(quote(*(+ 1 2)4))))
+
+	
+	`))
+
+	//((a b)(c d)(e f))// to do car cdr list quote
+
+	//(1 2 3)(5 6 7) -> ((1 5)(2 6)(3 7))
+
 	fmt.Println(mess2, "\n")
 	if !mess2 {
 		fmt.Println(elem2)
@@ -725,103 +738,126 @@ func main() {
 			fmt.Println(elem)
 			fmt.Println("Error return eval")
 		} else {
-			printList(elem)
+			printList(elem) //to do создать внешний файл для кода в Lisp
 		}
+
 	}
-	//
-     // (reverse(quote(a b c))) = ...(append(reverse(quote( b c)))(quote(a)))...
-	//(progn(defined revappend(lambda (bs ys)(if (null bs) ys (revappend (cdr bs)(cons (car bs)ys)))))(revappend(quote(a b c))(quote(d e))))
-	//(progn (defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
-	//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
-	//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
-	//(list(defined x (lambda (y) 25)) (x 13)
-	//(list(defined cudr (lambda (y)(cdr y))) (cudr (1 2 3 4 5))) cdr
-	//(list(defined sq (lambda (y) (* (* y y) y))) (sq 3))
-	//fmt.Println(structVar1, structVar2, structVar3)
-	//(cons (quote(a b c)))
-	//((lambda (x y) (+ x y)) 3 4)  (3 4)
-	//((lambda (x) x) (+ 1 2) 8)
-
-	/* var bar interface{}
-	   bar=42
-	   bar = bar.(int) + 1
-	   fmt.Println(bar)
-	   bar="bar"
-	   fmt.Println(bar)
-
-	   if = 2 2 (/ 4 2) 42
-
-	    (define member(lambda(lst x)
-		(if(null lst)
-		    false
-		    (if (= (car lst) x)
-			true
-			(member(cdr lst)x)))))
-	    (member(quote(a b c))(quote e)))
-
-		(define fact(lambda (n)
-		(if(= n 0)
-		    1
-		    (if(= n 1)
-			1
-			(* n (fact (- n 1)))))))
-		(fact 5))`))
-		
-		assoc	(cond((null lst) false)
-		    ((= key (cdr(car lst)))(cdr(cdr lst)))
-		    (true(assoc(cdr lst))))))
-		    
-		    progn	for exp != nil {
-
-				eval(exp.data, dict)
-				exp = exp.nextdata
-				if exp.nextdata == nil {
-					elem, mess := eval(exp.data, dict)
-					if !mess {
-						return elem, mess
-					}
-					return elem, true
-				}
-			}
-
-
-			(define append(lambda (bs ys)
-	         (if (null bs)
-	             ys
-	             (cons (car bs)(append (cdr bs)ys)))))
-	    (define len (lambda (y)
-		 (if (null y)
-		  0 
-		  (+ (len(cdr y)) 1))))
-	    (define revList(lambda (ys)
-		(if (null ys)
-		    ys
-		    (append(revList(cdr ys))(cons(car ys)(quote()))))))
-	    (define butLast(lambda (ys)
-		(if (= (len ys)  1)
-		    (quote())
-		    (cons(car ys)(butLast(cdr ys))))))
-	    (define member(lambda(lst x)
-		(if(null lst)
-		    false
-		    (if (= (car lst) x)
-			true
-			(member(cdr lst)x)))))
-	    (define fact(lambda (n)
-		(cond((= n 0) 1)
-		    ((= n 1) 1)
-			(true (* n (fact (- n 1)))))))
-	    (define assoc(lambda(lst key)
-		(if(null lst)
-		    false
-		    (if (= key (cdr(car lst)))
-			(cdr(cdr lst))
-			(assoc(cdr lst))))))
-		(assoc(quote((1 2)(3 4)))3)
-		
-	*/
-
 }
+
+/* file, err := os.Open("hello.txt")
+if err != nil {
+	fmt.Println(err)
+	os.Exit(1)
+}
+defer file.Close()
+
+data := make([]byte, 64)
+
+for {
+	n, err := file.Read(data)
+	if err == io.EOF { // если конец файла
+		break // выходим из цикла
+	}
+	fmt.Print(string(data[:n]))
+} */
+//
+// (reverse(quote(a b c))) = ...(append(reverse(quote( b c)))(quote(a)))...
+//(progn(define revappend(lambda (bs ys)(if (null bs) ys (revappend (cdr bs)(cons (car bs)ys)))))(revappend(quote(a b c))(quote(d e))))
+//(progn (defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c)))) подсчет элементов с progn
+//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(a b c))))
+//(list(defined len (lambda (y) (if (null y) 0 (+ (len(cdr y)) 1)))) (len (quote(1 2 3 4 5))))
+//(list(defined x (lambda (y) 25)) (x 13)
+//(list(defined cudr (lambda (y)(cdr y))) (cudr (1 2 3 4 5))) cdr
+//(list(defined sq (lambda (y) (* (* y y) y))) (sq 3))
+//fmt.Println(structVar1, structVar2, structVar3)
+//(cons (quote(a b c)))
+//((lambda (x y) (+ x y)) 3 4)  (3 4)
+//((lambda (x) x) (+ 1 2) 8)
+
+/* var bar interface{}
+   bar=42
+   bar = bar.(int) + 1
+   fmt.Println(bar)
+   bar="bar"
+   fmt.Println(bar)
+
+   if = 2 2 (/ 4 2) 42
+
+    (define member(lambda(lst x)
+	(if(null lst)
+	    false
+	    (if (= (car lst) x)
+		true
+		(member(cdr lst)x)))))
+    (member(quote(a b c))(quote e)))
+
+	(define fact(lambda (n)
+	(if(= n 0)
+	    1
+	    (if(= n 1)
+		1
+		(* n (fact (- n 1)))))))
+	(fact 5))`))
+
+	assoc	(cond((null lst) false)
+	    ((= key (cdr(car lst)))(cdr(cdr lst)))
+	    (true(assoc(cdr lst))))))
+
+	    progn	for exp != nil {
+
+			eval(exp.data, dict)
+			exp = exp.nextdata
+			if exp.nextdata == nil {
+				elem, mess := eval(exp.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				return elem, true
+			}
+		}
+
+
+		(define append(lambda (bs ys)
+         (if (null bs)
+             ys
+             (cons (car bs)(append (cdr bs)ys)))))
+    (define len (lambda (y)
+	 (if (null y)
+	  0
+	  (+ (len(cdr y)) 1))))
+    (define revList(lambda (ys)
+	(if (null ys)
+	    ys
+	    (append(revList(cdr ys))(cons(car ys)(quote()))))))
+    (define butLast(lambda (ys)
+	(if (= (len ys)  1)
+	    (quote())
+	    (cons(car ys)(butLast(cdr ys))))))
+    (define member(lambda(lst x)
+	(if(null lst)
+	    false
+	    (if (= (car lst) x)
+		true
+		(member(cdr lst)x)))))
+    (define fact(lambda (n)
+	(cond((= n 0) 1)
+	    ((= n 1) 1)
+		(true (* n (fact (- n 1)))))))
+    (define assoc(lambda(lst key)
+(if(null lst)
+	false
+	(if (= key (car(car lst)))
+	(car(cdr(car lst)))
+	(assoc(cdr lst) key)))))
+(assoc(quote((1 2)(3 4)))3))
+		(define pairlis(lambda(lst1 lst2)
+(if(null lst1)
+	(quote())
+	(cons(list(car lst1)(car lst2))
+		(pairlis(cdr lst1)(cdr lst2))))))
+(pairlis(quote(1 2))(quote(3 4)))
+
+*/
 
 //(1 2 4 6)
 //(2 4 (5 6))
