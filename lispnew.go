@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"strconv"
 )
 
@@ -702,31 +703,11 @@ func main() {
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
 	// (butLast '(a)) -> '()
-
-	elem2, mess2 := parse(tokenize(`
-	
-	
-	(progn
-		(define pairlis(lambda(lst1 lst2)
-			(if(null lst1)
-				(quote())
-				(cons(list(car lst1)(car lst2))
-			(pairlis(cdr lst1)(cdr lst2))))))
-		(define eval(lambda(lst)
-			(cond((numberp lst) lst)
-				((= (car lst) (quote +)) (+ (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
-				((= (car lst) (quote -)) (- (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
-				((= (car lst) (quote *)) (* (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
-				((= (car lst) (quote /)) (/ (eval(car(cdr lst))) (eval(car(cdr(cdr lst)))))))))
-			
-	(eval(quote(*(+ 1 2)4))))
-
-	
-	`))
-
-	//((a b)(c d)(e f))// to do car cdr list quote
-
-	//(1 2 3)(5 6 7) -> ((1 5)(2 6)(3 7))
+	data, err := ioutil.ReadFile("data.txt")
+	if err != nil {
+		fmt.Print(err)
+	}
+	elem2, mess2 := parse(tokenize(string(data)))
 
 	fmt.Println(mess2, "\n")
 	if !mess2 {
@@ -738,11 +719,16 @@ func main() {
 			fmt.Println(elem)
 			fmt.Println("Error return eval")
 		} else {
-			printList(elem) //to do создать внешний файл для кода в Lisp
+			printList(elem)
 		}
 
 	}
+
 }
+
+//((a b)(c d)(e f))// to do car cdr list quote
+
+//(1 2 3)(5 6 7) -> ((1 5)(2 6)(3 7))
 
 /* file, err := os.Open("hello.txt")
 if err != nil {
@@ -857,6 +843,14 @@ for {
 		(pairlis(cdr lst1)(cdr lst2))))))
 (pairlis(quote(1 2))(quote(3 4)))
 
+(define eval(lambda(lst)
+			(cond((numberp lst) lst)
+				((= (car lst) (quote +)) (+ (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
+				((= (car lst) (quote -)) (- (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
+				((= (car lst) (quote *)) (* (eval(car(cdr lst))) (eval(car(cdr(cdr lst))))))
+				((= (car lst) (quote /)) (/ (eval(car(cdr lst))) (eval(car(cdr(cdr lst)))))))))
+
+	(eval(quote(*(+ 1 2)4))))
 */
 
 //(1 2 4 6)

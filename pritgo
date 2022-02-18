@@ -1,0 +1,731 @@
+(6 5 (3 2 1))((3 2 1) 5 6)i:  6
+i:  18
+i:  32
+i:  40
+i:  46
+i:  58
+i:  62
+i:  70
+i:  103
+i:  109
+i:  116
+i:  117
+i:  125
+i:  132
+i:  135
+i:  136
+i:  137
+i:  138
+i:  139
+i:  146
+i:  158
+i:  166
+i:  168
+i:  173
+i:  177
+i:  184
+i:  197
+i:  200
+i:  204
+i:  210
+i:  211
+i:  214
+i:  215
+i:  216
+i:  217
+i:  224
+i:  239
+i:  247
+i:  250
+i:  254
+i:  258
+i:  266
+i:  283
+i:  290
+i:  298
+i:  305
+i:  306
+i:  307
+i:  312
+i:  319
+i:  320
+i:  326
+i:  327
+i:  328
+i:  329
+i:  330
+i:  331
+i:  332
+i:  333
+i:  343
+i:  351
+i:  357
+i:  363
+i:  364
+i:  365
+i:  366
+storeStr: 
+return: Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(()Atoi:  0 strconv.Atoi: parsing "progn": invalid syntax progn
+
+ stack: 
+(progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( progn ()Atoi:  0 strconv.Atoi: parsing "define": invalid syntax define
+
+ stack: 
+(define ( progn ()Atoi:  0 strconv.Atoi: parsing "append": invalid syntax append
+
+ stack: 
+(append define ( progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "lambda": invalid syntax lambda
+
+ stack: 
+(lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "bs": invalid syntax bs
+
+ stack: 
+(bs ( lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys bs ( lambda ( append define ( progn ()
+
+ tempList: 
+(ys)
+ tempList: 
+(bs ys)Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "if": invalid syntax if
+
+ stack: 
+(if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "null": invalid syntax null
+
+ stack: 
+(null ( if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "bs": invalid syntax bs
+
+ stack: 
+(bs null ( if ( (bs ys) lambda ( append define ( progn ()
+
+ tempList: 
+(bs)
+ tempList: 
+(null bs)Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "cons": invalid syntax cons
+
+ stack: 
+(cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "car": invalid syntax car
+
+ stack: 
+(car ( cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "bs": invalid syntax bs
+
+ stack: 
+(bs car ( cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()
+
+ tempList: 
+(bs)
+ tempList: 
+(car bs)Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (car bs) cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "append": invalid syntax append
+
+ stack: 
+(append ( (car bs) cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( append ( (car bs) cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "cdr": invalid syntax cdr
+
+ stack: 
+(cdr ( append ( (car bs) cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()Atoi:  0 strconv.Atoi: parsing "bs": invalid syntax bs
+
+ stack: 
+(bs cdr ( append ( (car bs) cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()
+
+ tempList: 
+(bs)
+ tempList: 
+(cdr bs)Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys (cdr bs) append ( (car bs) cons ( ys (null bs) if ( (bs ys) lambda ( append define ( progn ()
+
+ tempList: 
+(ys)
+ tempList: 
+((cdr bs) ys)
+ tempList: 
+(append (cdr bs) ys)
+
+ tempList: 
+((append (cdr bs) ys))
+ tempList: 
+((car bs) (append (cdr bs) ys))
+ tempList: 
+(cons (car bs) (append (cdr bs) ys))
+
+ tempList: 
+((cons (car bs) (append (cdr bs) ys)))
+ tempList: 
+(ys (cons (car bs) (append (cdr bs) ys)))
+ tempList: 
+((null bs) ys (cons (car bs) (append (cdr bs) ys)))
+ tempList: 
+(if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+
+ tempList: 
+((if (null bs) ys (cons (car bs) (append (cdr bs) ys))))
+ tempList: 
+((bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))
+ tempList: 
+(lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))
+
+ tempList: 
+((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))))
+ tempList: 
+(append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))))
+ tempList: 
+(define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))))Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "define": invalid syntax define
+
+ stack: 
+(define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "len": invalid syntax len
+
+ stack: 
+(len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "lambda": invalid syntax lambda
+
+ stack: 
+(lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "y": invalid syntax y
+
+ stack: 
+(y ( lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(y)Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "if": invalid syntax if
+
+ stack: 
+(if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "null": invalid syntax null
+
+ stack: 
+(null ( if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "y": invalid syntax y
+
+ stack: 
+(y null ( if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(y)
+ tempList: 
+(null y)Atoi:  0 <nil> 0
+Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "+": invalid syntax +
+
+ stack: 
+(+ ( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( + ( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "len": invalid syntax len
+
+ stack: 
+(len ( + ( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( len ( + ( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "cdr": invalid syntax cdr
+
+ stack: 
+(cdr ( len ( + ( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "y": invalid syntax y
+
+ stack: 
+(y cdr ( len ( + ( 0 (null y) if ( (y) lambda ( len define ( (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(y)
+ tempList: 
+(cdr y)
+
+ tempList: 
+((cdr y))
+ tempList: 
+(len (cdr y))Atoi:  1 <nil> 1
+
+
+ tempList: 
+(1)
+ tempList: 
+((len (cdr y)) 1)
+ tempList: 
+(+ (len (cdr y)) 1)
+
+ tempList: 
+((+ (len (cdr y)) 1))
+ tempList: 
+(0 (+ (len (cdr y)) 1))
+ tempList: 
+((null y) 0 (+ (len (cdr y)) 1))
+ tempList: 
+(if (null y) 0 (+ (len (cdr y)) 1))
+
+ tempList: 
+((if (null y) 0 (+ (len (cdr y)) 1)))
+ tempList: 
+((y) (if (null y) 0 (+ (len (cdr y)) 1)))
+ tempList: 
+(lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))
+
+ tempList: 
+((lambda (y) (if (null y) 0 (+ (len (cdr y)) 1))))
+ tempList: 
+(len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1))))
+ tempList: 
+(define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1))))Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "define": invalid syntax define
+
+ stack: 
+(define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "revList": invalid syntax revList
+
+ stack: 
+(revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "lambda": invalid syntax lambda
+
+ stack: 
+(lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys ( lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(ys)Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "if": invalid syntax if
+
+ stack: 
+(if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "null": invalid syntax null
+
+ stack: 
+(null ( if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys null ( if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(ys)
+ tempList: 
+(null ys)Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "append": invalid syntax append
+
+ stack: 
+(append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "revList": invalid syntax revList
+
+ stack: 
+(revList ( append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( revList ( append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "cdr": invalid syntax cdr
+
+ stack: 
+(cdr ( revList ( append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys cdr ( revList ( append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(ys)
+ tempList: 
+(cdr ys)
+
+ tempList: 
+((cdr ys))
+ tempList: 
+(revList (cdr ys))Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "cons": invalid syntax cons
+
+ stack: 
+(cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "car": invalid syntax car
+
+ stack: 
+(car ( cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "ys": invalid syntax ys
+
+ stack: 
+(ys car ( cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(ys)
+ tempList: 
+(car ys)Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (car ys) cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "quote": invalid syntax quote
+
+ stack: 
+(quote ( (car ys) cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( quote ( (car ys) cons ( (revList (cdr ys)) append ( ys (null ys) if ( (ys) lambda ( revList define ( (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+
+ tempList: 
+(())
+ tempList: 
+(quote ())
+
+ tempList: 
+((quote ()))
+ tempList: 
+((car ys) (quote ()))
+ tempList: 
+(cons (car ys) (quote ()))
+
+ tempList: 
+((cons (car ys) (quote ())))
+ tempList: 
+((revList (cdr ys)) (cons (car ys) (quote ())))
+ tempList: 
+(append (revList (cdr ys)) (cons (car ys) (quote ())))
+
+ tempList: 
+((append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ tempList: 
+(ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ tempList: 
+((null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ tempList: 
+(if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+
+ tempList: 
+((if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))
+ tempList: 
+((ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))
+ tempList: 
+(lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))
+
+ tempList: 
+((lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))))
+ tempList: 
+(revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))))
+ tempList: 
+(define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))))Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "revList": invalid syntax revList
+
+ stack: 
+(revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "quote": invalid syntax quote
+
+ stack: 
+(quote ( revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "(": invalid syntax (
+
+ stack: 
+(( quote ( revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "a": invalid syntax a
+
+ stack: 
+(a ( quote ( revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "b": invalid syntax b
+
+ stack: 
+(b a ( quote ( revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()Atoi:  0 strconv.Atoi: parsing "c": invalid syntax c
+
+ stack: 
+(c b a ( quote ( revList ( (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) progn ()
+
+ tempList: 
+(c)
+ tempList: 
+(b c)
+ tempList: 
+(a b c)
+
+ tempList: 
+((a b c))
+ tempList: 
+(quote (a b c))
+
+ tempList: 
+((quote (a b c)))
+ tempList: 
+(revList (quote (a b c)))
+
+ tempList: 
+((revList (quote (a b c))))
+ tempList: 
+((define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (revList (quote (a b c))))
+ tempList: 
+((define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (revList (quote (a b c))))
+ tempList: 
+((define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (revList (quote (a b c))))
+ tempList: 
+(progn (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (revList (quote (a b c))))((progn (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (revList (quote (a b c)))))
+ return parse: 
+true 
+
+expr: (progn (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys))))) (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1)))) (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ())))))) (revList (quote (a b c))))
+
+expr: progn
+
+expr: (define append (lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))))
+
+expr: (define len (lambda (y) (if (null y) 0 (+ (len (cdr y)) 1))))
+
+expr: (define revList (lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))))
+
+expr: (revList (quote (a b c)))
+
+expr: ((lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))) (quote (a b c)))
+
+formalArgs: expr: (quote (a b c))
+
+expr: (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ys : (a b c) 
+expr: (null ys)
+ys : (a b c) 
+expr: ys
+ys : (a b c) 
+el1:  false
+expr: (append (revList (cdr ys)) (cons (car ys) (quote ())))
+ys : (a b c) 
+expr: ((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))) (revList (cdr ys)) (cons (car ys) (quote ())))
+ys : (a b c) 
+formalArgs: expr: (revList (cdr ys))
+ys : (a b c) 
+expr: ((lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))) (cdr ys))
+ys : (a b c) 
+formalArgs: expr: (cdr ys)
+ys : (a b c) 
+expr: ys
+ys : (a b c) 
+expr: (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ys : (b c) 
+expr: (null ys)
+ys : (b c) 
+expr: ys
+ys : (b c) 
+el1:  false
+expr: (append (revList (cdr ys)) (cons (car ys) (quote ())))
+ys : (b c) 
+expr: ((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))) (revList (cdr ys)) (cons (car ys) (quote ())))
+ys : (b c) 
+formalArgs: expr: (revList (cdr ys))
+ys : (b c) 
+expr: ((lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))) (cdr ys))
+ys : (b c) 
+formalArgs: expr: (cdr ys)
+ys : (b c) 
+expr: ys
+ys : (b c) 
+expr: (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ys : (c) 
+expr: (null ys)
+ys : (c) 
+expr: ys
+ys : (c) 
+el1:  false
+expr: (append (revList (cdr ys)) (cons (car ys) (quote ())))
+ys : (c) 
+expr: ((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))) (revList (cdr ys)) (cons (car ys) (quote ())))
+ys : (c) 
+formalArgs: expr: (revList (cdr ys))
+ys : (c) 
+expr: ((lambda (ys) (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))) (cdr ys))
+ys : (c) 
+formalArgs: expr: (cdr ys)
+ys : (c) 
+expr: ys
+ys : (c) 
+expr: (if (null ys) ys (append (revList (cdr ys)) (cons (car ys) (quote ()))))
+ys : () 
+expr: (null ys)
+ys : () 
+expr: ys
+ys : () 
+el1:  true
+expr: ys
+ys : () 
+elem2: 
+()expr: (cons (car ys) (quote ()))
+ys : (c) 
+expr: (car ys)
+ys : (c) 
+expr: ys
+ys : (c) 
+expr: (quote ())
+ys : (c) 
+expr: (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+ys : (c) bs : () 
+expr: (null bs)
+ys : (c) bs : () 
+expr: bs
+ys : (c) bs : () 
+el1:  true
+expr: ys
+ys : (c) bs : () 
+elem2: 
+(c)elem3: 
+(c)expr: (cons (car ys) (quote ()))
+ys : (b c) 
+expr: (car ys)
+ys : (b c) 
+expr: ys
+ys : (b c) 
+expr: (quote ())
+ys : (b c) 
+expr: (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+ys : (b) bs : (c) 
+expr: (null bs)
+ys : (b) bs : (c) 
+expr: bs
+ys : (b) bs : (c) 
+el1:  false
+expr: (cons (car bs) (append (cdr bs) ys))
+ys : (b) bs : (c) 
+expr: (car bs)
+ys : (b) bs : (c) 
+expr: bs
+ys : (b) bs : (c) 
+expr: (append (cdr bs) ys)
+ys : (b) bs : (c) 
+expr: ((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))) (cdr bs) ys)
+ys : (b) bs : (c) 
+formalArgs: expr: (cdr bs)
+ys : (b) bs : (c) 
+expr: bs
+ys : (b) bs : (c) 
+expr: ys
+ys : (b) bs : (c) 
+expr: (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+bs : () ys : (b) 
+expr: (null bs)
+ys : (b) bs : () 
+expr: bs
+bs : () ys : (b) 
+el1:  true
+expr: ys
+bs : () ys : (b) 
+elem2: 
+(b)elem3: 
+(c b)elem3: 
+(c b)expr: (cons (car ys) (quote ()))
+ys : (a b c) 
+expr: (car ys)
+ys : (a b c) 
+expr: ys
+ys : (a b c) 
+expr: (quote ())
+ys : (a b c) 
+expr: (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+ys : (a) bs : (c b) 
+expr: (null bs)
+bs : (c b) ys : (a) 
+expr: bs
+ys : (a) bs : (c b) 
+el1:  false
+expr: (cons (car bs) (append (cdr bs) ys))
+bs : (c b) ys : (a) 
+expr: (car bs)
+bs : (c b) ys : (a) 
+expr: bs
+ys : (a) bs : (c b) 
+expr: (append (cdr bs) ys)
+ys : (a) bs : (c b) 
+expr: ((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))) (cdr bs) ys)
+bs : (c b) ys : (a) 
+formalArgs: expr: (cdr bs)
+ys : (a) bs : (c b) 
+expr: bs
+ys : (a) bs : (c b) 
+expr: ys
+ys : (a) bs : (c b) 
+expr: (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+bs : (b) ys : (a) 
+expr: (null bs)
+ys : (a) bs : (b) 
+expr: bs
+ys : (a) bs : (b) 
+el1:  false
+expr: (cons (car bs) (append (cdr bs) ys))
+ys : (a) bs : (b) 
+expr: (car bs)
+ys : (a) bs : (b) 
+expr: bs
+ys : (a) bs : (b) 
+expr: (append (cdr bs) ys)
+ys : (a) bs : (b) 
+expr: ((lambda (bs ys) (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))) (cdr bs) ys)
+bs : (b) ys : (a) 
+formalArgs: expr: (cdr bs)
+ys : (a) bs : (b) 
+expr: bs
+bs : (b) ys : (a) 
+expr: ys
+ys : (a) bs : (b) 
+expr: (if (null bs) ys (cons (car bs) (append (cdr bs) ys)))
+bs : () ys : (a) 
+expr: (null bs)
+bs : () ys : (a) 
+expr: bs
+ys : (a) bs : () 
+el1:  true
+expr: ys
+bs : () ys : (a) 
+elem2: 
+(a)elem3: 
+(b a)elem3: 
+(c b a)elem3: 
+(c b a)(c b a)
