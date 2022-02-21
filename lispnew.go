@@ -127,11 +127,18 @@ func tokenize(data string) []string {
 			}
 			arr = append(arr, data[i:i+1])
 			storeStr = ""
+		} else if string(dataRune[i]) == ";" {
+			for string(dataRune[i]) != "\n" {
+				_ = string(dataRune[i : i+1])
+				fmt.Println("string(dataRune[i]): ", string(dataRune[i]))
+
+			}
 		} else if string(dataRune[i]) == " " || string(dataRune[i]) == "\n" || string(dataRune[i]) == "\t" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 				storeStr = ""
 			}
+
 		} else {
 			storeStr += string(dataRune[i : i+1])
 		}
@@ -139,8 +146,8 @@ func tokenize(data string) []string {
 	if len(storeStr) != 0 {
 		arr = append(arr, storeStr)
 	}
-	fmt.Println("storeStr:", storeStr)
-	fmt.Print("return: ")
+//	fmt.Println("storeStr:", storeStr)
+//	fmt.Print("return: ")
 	return arr
 }
 
@@ -703,7 +710,7 @@ func main() {
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
 	// (butLast '(a)) -> '()
-	data, err := ioutil.ReadFile("data.txt")
+	data, err := ioutil.ReadFile("data.lisp")
 	if err != nil {
 		fmt.Print(err)
 	}
@@ -724,7 +731,9 @@ func main() {
 
 	}
 
-}
+} // to do разобраться с argv
+// to do сделать комментариии в токенайзе
+//разобраться почему нет ошибки при выражении ((+ 1 2)))
 
 //((a b)(c d)(e f))// to do car cdr list quote
 
