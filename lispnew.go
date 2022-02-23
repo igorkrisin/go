@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strconv"
 )
 
@@ -88,7 +89,7 @@ func parse(arr []string) (interface{}, bool) {
 		}
 		if !equalEl(arr[i], ")") {
 			j, err := strconv.Atoi(arr[i])
-			fmt.Println("Atoi: ", j, err, arr[i])
+			//fmt.Println("Atoi: ", j, err, arr[i])
 			if err != nil {
 				stack = &list{data: arr[i], nextdata: stack}
 				fmt.Println("\n", "stack: ")
@@ -100,8 +101,8 @@ func parse(arr []string) (interface{}, bool) {
 			var tempList *list = nil
 			for lenList(stack) != 0 && !equalEl(stack.data, "(") {
 				tempList = &list{data: stack.data, nextdata: tempList}
-				fmt.Println("\n", "tempList: ")
-				printList(tempList)
+				//fmt.Println("\n", "tempList: ")
+				//printList(tempList)
 				stack = stack.nextdata
 			}
 			stack = stack.nextdata
@@ -128,11 +129,11 @@ func tokenize(data string) []string {
 			arr = append(arr, data[i:i+1])
 			storeStr = ""
 		} else if string(dataRune[i]) == ";" {
-			for string(dataRune[i]) != "\n" {
-				_ = string(dataRune[i : i+1])
+			/* for string(dataRune[i]) != "\n" {
+				
 				fmt.Println("string(dataRune[i]): ", string(dataRune[i]))
 
-			}
+			} */
 		} else if string(dataRune[i]) == " " || string(dataRune[i]) == "\n" || string(dataRune[i]) == "\t" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
@@ -146,8 +147,8 @@ func tokenize(data string) []string {
 	if len(storeStr) != 0 {
 		arr = append(arr, storeStr)
 	}
-//	fmt.Println("storeStr:", storeStr)
-//	fmt.Print("return: ")
+	//	fmt.Println("storeStr:", storeStr)
+	//	fmt.Print("return: ")
 	return arr
 }
 
@@ -431,6 +432,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			switch el1 := elem.(type) {
 			case *list:
+			    if lenList(el1) < 1 {
+				return "car to empty list -  cannot", false
+			    }
 				return el1.data, true
 			default:
 				return "arguments type is not list in func car", false
@@ -448,6 +452,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			switch el1 := elem.(type) {
 			case *list:
+			    if lenList(el1) < 1 {
+				return "cdr to empty list -  cannot", false
+			    }	
 				return el1.nextdata, true
 			default:
 				return "arguments type is not list in func cdr", false
@@ -639,7 +646,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				default:
 					return "arguments type is not list in function lambda", false
 				}
+				
 			}
+			return "argument is not lambda", false
 		case string:
 
 			j, err := global[el1]
@@ -658,6 +667,8 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				return elem, true
 
 			}
+		default:
+		    return "wrong function, first element to list not function", false
 		}
 
 	//cons 23 (1 2) -> (23 1 2)
@@ -687,11 +698,14 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 		return expr, true
 	}
 	return expr, true
+	
 }
 
 // ((lambda (x y) (+ x y)) 3 4)
 
 func main() {
+	argsWithProg := os.Args
+	fmt.Println(argsWithProg)
 	global = make(map[string]interface{})
 	dict := make(map[string]interface{})
 
@@ -710,7 +724,7 @@ func main() {
 	//fmt.Print("EQUALMAIN",")" == ")")
 	//fmt.Println(tokenize())
 	// (butLast '(a)) -> '()
-	data, err := ioutil.ReadFile("data.lisp")
+	data, err := ioutil.ReadFile(argsWithProg[1])
 	if err != nil {
 		fmt.Print(err)
 	}
@@ -733,7 +747,7 @@ func main() {
 
 } // to do разобраться с argv
 // to do сделать комментариии в токенайзе
-//разобраться почему нет ошибки при выражении ((+ 1 2)))
+//разобраться почему нет ошибки при выражении ((+ 1 2))
 
 //((a b)(c d)(e f))// to do car cdr list quote
 
