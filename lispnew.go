@@ -121,19 +121,16 @@ func tokenize(data string) []string {
 	storeStr := ""
 	arr := []string{}
 	dataRune := []rune(data)
+
 	for i := range dataRune {
+
 		if string(dataRune[i]) == "(" || string(dataRune[i]) == ")" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
 			}
 			arr = append(arr, data[i:i+1])
 			storeStr = ""
-		} else if string(dataRune[i]) == ";" {
-			/* for string(dataRune[i]) != "\n" {
-				
-				fmt.Println("string(dataRune[i]): ", string(dataRune[i]))
 
-			} */
 		} else if string(dataRune[i]) == " " || string(dataRune[i]) == "\n" || string(dataRune[i]) == "\t" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
@@ -274,14 +271,13 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			}
 		} else if equalEl(exp.data, "cond") {
-			if lenList(exp) < 2 {
-				return "not enough arguments in func cond", false //question: why cond fatal error if count argument < 2
-				//} else if lenList(exp) > 2 {
-				//return "too many arguments in func cond", false
-			}
+
 			for exp.nextdata != nil {
 				switch el1 := exp.nextdata.data.(type) {
 				case *list:
+					if lenList(el1) != 2 {
+						return "amount arguments in cond != 2", false
+					}
 					elem, mess := eval(el1.data, dict)
 					if !mess {
 						return elem, mess
@@ -291,11 +287,15 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 					} else if elem == "true" {
 						elem2, mess2 := eval(el1.nextdata.data, dict)
 						return elem2, mess2
+					} else {
+						return "missing true-false condition for cond", false
 					}
 				default:
 					return "arguments type not list in func cond", false
 				}
+
 			}
+			return "missing true-argument in cond", false
 			/* for exp.nextdata != nil {
 				switch el1 := exp.nextdata.data.(type) {
 				case *list:
@@ -432,9 +432,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			switch el1 := elem.(type) {
 			case *list:
-			    if lenList(el1) < 1 {
-				return "car to empty list -  cannot", false
-			    }
+				if lenList(el1) < 1 {
+					return "car to empty list -  cannot", false
+				}
 				return el1.data, true
 			default:
 				return "arguments type is not list in func car", false
@@ -452,9 +452,9 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			switch el1 := elem.(type) {
 			case *list:
-			    if lenList(el1) < 1 {
-				return "cdr to empty list -  cannot", false
-			    }	
+				if lenList(el1) < 1 {
+					return "cdr to empty list -  cannot", false
+				}
 				return el1.nextdata, true
 			default:
 				return "arguments type is not list in func cdr", false
@@ -603,6 +603,21 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			default:
 				return "false", true
 			}
+		} else if equalEl(exp.data, "simbolp") {
+			if lenList(exp) != 2 {
+				return "amount arguments simbolp != 2", false
+			}
+			elem, mess := eval(exp.nextdata.data, dict)
+			if !mess {
+				return elem, mess
+			}
+			switch el1 := elem.(type) {
+			case string:
+				_ = el1
+				return "true", true
+			}
+
+			return "false", true
 		}
 		// (define foo 42)
 		switch el1 := exp.data.(type) {
@@ -646,7 +661,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				default:
 					return "arguments type is not list in function lambda", false
 				}
-				
+
 			}
 			return "argument is not lambda", false
 		case string:
@@ -668,7 +683,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 
 			}
 		default:
-		    return "wrong function, first element to list not function", false
+			return "wrong function, first element to list not function", false
 		}
 
 	//cons 23 (1 2) -> (23 1 2)
@@ -698,7 +713,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 		return expr, true
 	}
 	return expr, true
-	
+
 }
 
 // ((lambda (x y) (+ x y)) 3 4)
