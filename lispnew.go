@@ -123,7 +123,12 @@ func tokenize(data string) []string {
 	dataRune := []rune(data)
 
 	for i := range dataRune {
-
+		
+		for string(dataRune[i]) == ";" {
+			if string(dataRune[i]) != "\n"{
+				break
+			}
+		}
 		if string(dataRune[i]) == "(" || string(dataRune[i]) == ")" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
@@ -603,7 +608,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			default:
 				return "false", true
 			}
-		} else if equalEl(exp.data, "simbolp") {
+		} else if equalEl(exp.data, "symbolp") {
 			if lenList(exp) != 2 {
 				return "amount arguments simbolp != 2", false
 			}
