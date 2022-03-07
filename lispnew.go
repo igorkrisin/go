@@ -15,6 +15,8 @@ type list struct {
 
 }
 
+
+
 func printList(expr interface{}) {
 	//fmt.Print("(")
 	switch exp := expr.(type) {
@@ -81,13 +83,13 @@ func parse(arr []string) (interface{}, bool) {
 	count := 0
 	count2 := 0
 	for i := 0; i < len(arr); i++ {
-		if equalEl(arr[i], ")") {
+		if arr[i] == ")" {
 			fmt.Println()
 			count++
-		} else if equalEl(arr[i], "(") {
+		} else if arr[i] == "(" {
 			count2++
 		}
-		if !equalEl(arr[i], ")") {
+		if arr[i] != ")" {
 			j, err := strconv.Atoi(arr[i])
 			//fmt.Println("Atoi: ", j, err, arr[i])
 			if err != nil {
@@ -97,7 +99,7 @@ func parse(arr []string) (interface{}, bool) {
 			} else {
 				stack = &list{data: j, nextdata: stack}
 			}
-		} else if equalEl(arr[i], ")") {
+		} else if arr[i] == ")" {
 			var tempList *list = nil
 			for lenList(stack) != 0 && !equalEl(stack.data, "(") {
 				tempList = &list{data: stack.data, nextdata: tempList}
@@ -117,6 +119,33 @@ func parse(arr []string) (interface{}, bool) {
 	return stack.data, true //некий костыль
 }
 
+
+func comments(data string) string {
+	amountStr := ""
+	dataRune := []rune(data)
+	i := 0
+	for true {
+		if i == len(dataRune) {
+			break
+		}
+		if string(dataRune[i]) != ";" {
+			
+			amountStr += string(dataRune[i])
+			i++
+		} else {
+			for string(dataRune[i]) != "\n" {
+				i++
+				if i == len(dataRune) {
+					break
+				}
+			}
+			i++
+		}
+	}
+	return amountStr
+}
+
+
 func tokenize(data string) []string {
 	storeStr := ""
 	arr := []string{}
@@ -124,11 +153,6 @@ func tokenize(data string) []string {
 
 	for i := range dataRune {
 		
-		for string(dataRune[i]) == ";" {
-			if string(dataRune[i]) != "\n"{
-				break
-			}
-		}
 		if string(dataRune[i]) == "(" || string(dataRune[i]) == ")" {
 			if len(storeStr) != 0 {
 				arr = append(arr, storeStr)
@@ -221,409 +245,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 	case *list:
 		// true - нет ошибок
 		// false - произошла ошибка
-		if equalEl(exp.data, "+") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func +", false
-			} else if lenList(exp) > 3 {
-				return "too many arguments in func +", false
-			}
-			elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
-			if !mess {
-				return elem, mess
-			}
-
-			switch el1 := elem.(*list).data.(type) {
-			case int:
-				switch el2 := elem.(*list).nextdata.data.(type) {
-				case int:
-					return el1 + el2, true
-				}
-			default:
-				return "arguments type not int in func +", false
-			}
-		} else if equalEl(exp.data, "if") {
-			if lenList(exp) < 4 {
-				//fmt.Println("lenList<4: ",lenList(exp))
-				return "not enough arguments in func if", false
-			} else if lenList(exp) > 4 {
-				//fmt.Println("lenList>4: ",lenList(exp))
-				return "too many arguments in func if", false
-			}
-
-			//fmt.Println("lenList: ",lenList(exp))
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			switch el1 := elem.(type) {
-			case string:
-				//fmt.Println("el1: ", el1)
-				if el1 == "true" {
-					elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-
-					return elem2, mess2
-				} else if el1 == "false" {
-					elem3, mess3 := eval(exp.nextdata.nextdata.nextdata.data, dict)
-					if !mess3 {
-						return elem3, mess3
-					}
-					//fmt.Println("elem3: ")
-					//printList(elem3)
-					return elem3, true
-				}
-			default:
-				return "arguments type not string in func if", false
-
-			}
-		} else if equalEl(exp.data, "cond") {
-
-			for exp.nextdata != nil {
-				switch el1 := exp.nextdata.data.(type) {
-				case *list:
-					if lenList(el1) != 2 {
-						return "amount arguments in cond != 2", false
-					}
-					elem, mess := eval(el1.data, dict)
-					if !mess {
-						return elem, mess
-					}
-					if elem == "false" {
-						exp = exp.nextdata
-					} else if elem == "true" {
-						elem2, mess2 := eval(el1.nextdata.data, dict)
-						return elem2, mess2
-					} else {
-						return "missing true-false condition for cond", false
-					}
-				default:
-					return "arguments type not list in func cond", false
-				}
-
-			}
-			return "missing true-argument in cond", false
-			/* for exp.nextdata != nil {
-				switch el1 := exp.nextdata.data.(type) {
-				case *list:
-					if eval(el1.data, dict) == "true" {
-						return el1.nextdata.data
-					}
-					exp = exp.nextdata
-				}
-
-			} */
-		} else if equalEl(exp.data, "-") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func -", false
-			} else if lenList(exp) > 3 {
-				return "too many arguments in func -", false
-			}
-			elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
-			if !mess {
-				return elem, mess
-			}
-
-			switch el1 := elem.(*list).data.(type) {
-			case int:
-				switch el2 := elem.(*list).nextdata.data.(type) {
-				case int:
-					return el1 - el2, true
-				}
-			default:
-				return "arguments type not int in func -", false
-			}
-		} else if equalEl(exp.data, "*") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func *", false
-			} else if lenList(exp) > 3 {
-				return "too many arguments in func *", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-			if !mess2 {
-				return elem2, mess2
-			}
-
-			switch el1 := elem.(type) {
-			case int:
-				switch el2 := elem2.(type) {
-				case int:
-					return el1 * el2, true
-				}
-			default:
-				return "arguments type is not int in func *", false
-			}
-		} else if equalEl(exp.data, "/") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func /", false
-			} else if lenList(exp) > 3 {
-				return "too many arguments in func /", false
-			}
-			elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
-			if !mess {
-				return elem, mess
-			}
-
-			switch el1 := elem.(*list).data.(type) {
-			case int:
-				switch el2 := elem.(*list).nextdata.data.(type) {
-				case int:
-					return el1 / el2, true
-				}
-			default:
-				return "arguments type is not int in func /", false
-			}
-
-		} else if equalEl(exp.data, "=") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func =", false
-			} else if lenList(exp) > 3 {
-				return "too many arguments in func =", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-			if !mess2 {
-				return elem2, mess2
-			}
-			switch el3 := elem.(type) {
-			case string:
-				switch el4 := elem2.(type) {
-				case string:
-					if el3 == el4 {
-						return "true", true
-					} else {
-						return "false", true
-					}
-				}
-
-			}
-			switch el1 := elem.(type) {
-			case int:
-				switch el2 := elem2.(type) {
-				case int:
-					if el1 == el2 {
-						return "true", true
-					} else {
-						return "false", true
-					}
-				}
-			}
-			return "false", true
-		} else if equalEl(exp.data, "quote") {
-			if lenList(exp) < 1 {
-				return "not enough arguments in func quote", false
-			} else if lenList(exp) > 2 {
-				return "too many arguments in func quote", false
-			}
-			return exp.nextdata.data, true
-
-		} else if equalEl(exp.data, "car") {
-
-			if lenList(exp) < 2 {
-				//fmt.Println("len exp: ",lenList(exp) )
-				return "not enough arguments in func car", false
-			} else if lenList(exp) > 2 {
-				return "too many arguments in func car", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-
-			switch el1 := elem.(type) {
-			case *list:
-				if lenList(el1) < 1 {
-					return "car to empty list -  cannot", false
-				}
-				return el1.data, true
-			default:
-				return "arguments type is not list in func car", false
-
-			}
-		} else if equalEl(exp.data, "cdr") {
-			if lenList(exp) < 2 {
-				return "not enough arguments in func cdr", false
-			} else if lenList(exp) > 2 {
-				return "too many arguments in func cdr", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			switch el1 := elem.(type) {
-			case *list:
-				if lenList(el1) < 1 {
-					return "cdr to empty list -  cannot", false
-				}
-				return el1.nextdata, true
-			default:
-				return "arguments type is not list in func cdr", false
-			}
-		} else if equalEl(exp.data, "cons") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func cons", false
-			} else if lenList(exp) > 3 {
-				return "too many arguments in func cons", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
-			if !mess2 {
-				return elem2, mess2
-			}
-
-			//var el1 interface{} = elem
-			switch el2 := elem2.(type) {
-			case *list:
-				var tempList *list = &list{data: elem, nextdata: el2}
-				return tempList, true
-			default:
-				return "second argument type is not list in func cons", false
-			}
-
-		} else if equalEl(exp.data, "list") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func list", false
-			}
-			elem, mess := evalList(exp.nextdata, dict)
-			if !mess {
-				return elem, mess
-			}
-			return elem, true
-		} else if equalEl(exp.data, "null") {
-			if lenList(exp) < 2 {
-				return "not enough arguments in func null", false
-			} else if lenList(exp) > 2 {
-				return "too many arguments in func null", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-
-			switch el1 := elem.(type) {
-			case *list:
-				if lenList(el1) != 0 {
-					return "false", true
-				} else {
-					return "true", true
-				}
-			default:
-				return "arguments type is not list in func null", false
-			}
-
-		} else if equalEl(exp.data, "define") {
-			if lenList(exp) < 2 {
-				return "not enough arguments in func define", false
-			}
-			switch el1 := exp.nextdata.data.(type) {
-			case string:
-				global[el1] = exp.nextdata.nextdata.data
-				return el1, true
-			}
-		} else if equalEl(exp.data, "let") {
-			if lenList(exp) < 2 {
-				return "not enough arguments in func let", false
-			} else if lenList(exp) > 2 {
-				return "too many arguments in func let", false
-			}
-			switch el1 := exp.nextdata.data.(type) {
-			case *list:
-				dict = mapCopy(dict)
-				for el1 != nil {
-					switch el2 := el1.data.(type) {
-					case *list:
-						switch el3 := el2.data.(type) {
-						case string:
-
-							elem2, mess2 := eval(el2.nextdata.data, dict)
-							if !mess2 {
-								return elem2, mess2
-							}
-
-							dict[el3] = elem2
-						}
-					}
-					el1 = el1.nextdata
-				}
-			default:
-				return "arguments type is not list in func let", false
-
-			}
-			elem, mess := eval(exp.nextdata.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			return elem, true
-
-			//} else if equalEl
-
-		} else if equalEl(exp.data, "progn") {
-			if lenList(exp) < 3 {
-				return "not enough arguments in func progn", false
-			}
-			for exp != nil {
-				fmt.Print("exp: ")
-				printList(exp)
-				fmt.Println("")
-				//evalList(exp,dict)
-
-				if exp.nextdata != nil {
-					//temp, errSw :=
-					eval(exp.data, dict)
-					/* if !errSw {
-						return temp, false
-					}else { */
-					exp = exp.nextdata
-					//}
-
-				} else {
-					elem, mess := eval(exp.data, dict)
-					if !mess {
-						return elem, mess
-					}
-					return elem, true
-				}
-
-			}
-		} else if equalEl(exp.data, "numberp") {
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-
-			switch el1 := elem.(type) {
-			case int:
-
-				_ = el1
-				return "true", true
-
-			default:
-				return "false", true
-			}
-		} else if equalEl(exp.data, "symbolp") {
-			if lenList(exp) != 2 {
-				return "amount arguments simbolp != 2", false
-			}
-			elem, mess := eval(exp.nextdata.data, dict)
-			if !mess {
-				return elem, mess
-			}
-			switch el1 := elem.(type) {
-			case string:
-				_ = el1
-				return "true", true
-			}
-
-			return "false", true
-		}
+	
 		// (define foo 42)
 		switch el1 := exp.data.(type) {
 		case *list:
@@ -670,27 +292,447 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 			}
 			return "argument is not lambda", false
 		case string:
+			////////////////////////////////////////////////////////////////////////
+			if el1 == "+" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func +", false
+				} else if lenList(exp) > 3 {
+					return "too many arguments in func +", false
+				}
+				elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
+				if !mess {
+					return elem, mess
+				}
+	
+				switch el1 := elem.(*list).data.(type) {
+				case int:
+					switch el2 := elem.(*list).nextdata.data.(type) {
+					case int:
+						return el1 + el2, true
+					}
+				default:
+					return "arguments type not int in func +", false
+				}
+			} else if el1 == "if" {
+				if lenList(exp) < 4 {
+					//fmt.Println("lenList<4: ",lenList(exp))
+					return "not enough arguments in func if", false
+				} else if lenList(exp) > 4 {
+					//fmt.Println("lenList>4: ",lenList(exp))
+					return "too many arguments in func if", false
+				}
+	
+				//fmt.Println("lenList: ",lenList(exp))
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				switch el1 := elem.(type) {
+				case string:
+					//fmt.Println("el1: ", el1)
+					if el1 == "true" {
+						elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
+	
+						return elem2, mess2
+					} else if el1 == "false" {
+						elem3, mess3 := eval(exp.nextdata.nextdata.nextdata.data, dict)
+						if !mess3 {
+							return elem3, mess3
+						}
+						//fmt.Println("elem3: ")
+						//printList(elem3)
+						return elem3, true
+					}
+				default:
+					return "arguments type not string in func if", false
+	
+				}
+			} else if el1 == "cond" {
+	
+				for exp.nextdata != nil {
+					switch el1 := exp.nextdata.data.(type) {
+					case *list:
+						if lenList(el1) != 2 {
+							return "amount arguments in cond != 2", false
+						}
+						elem, mess := eval(el1.data, dict)
+						if !mess {
+							return elem, mess
+						}
+						if elem == "false" {
+							exp = exp.nextdata
+						} else if elem == "true" {
+							elem2, mess2 := eval(el1.nextdata.data, dict)
+							return elem2, mess2
+						} else {
+							return "missing true-false condition for cond", false
+						}
+					default:
+						return "arguments type not list in func cond", false
+					}
+	
+				}
+				return "missing true-argument in cond", false
+				/* for exp.nextdata != nil {
+					switch el1 := exp.nextdata.data.(type) {
+					case *list:
+						if eval(el1.data, dict) == "true" {
+							return el1.nextdata.data
+						}
+						exp = exp.nextdata
+					}
+	
+				} */
+			} else if el1 == "-" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func -", false
+				} else if lenList(exp) > 3 {
+					return "too many arguments in func -", false
+				}
+				elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
+				if !mess {
+					return elem, mess
+				}
+	
+				switch el1 := elem.(*list).data.(type) {
+				case int:
+					switch el2 := elem.(*list).nextdata.data.(type) {
+					case int:
+						return el1 - el2, true
+					}
+				default:
+					return "arguments type not int in func -", false
+				}
+			} else if el1 == "*" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func *", false
+				} else if lenList(exp) > 3 {
+					return "too many arguments in func *", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
+				if !mess2 {
+					return elem2, mess2
+				}
+	
+				switch el1 := elem.(type) {
+				case int:
+					switch el2 := elem2.(type) {
+					case int:
+						return el1 * el2, true
+					}
+				default:
+					return "arguments type is not int in func *", false
+				}
+			} else if el1 == "/" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func /", false
+				} else if lenList(exp) > 3 {
+					return "too many arguments in func /", false
+				}
+				elem, mess := evalList(exp.nextdata, dict) //change eval to evalList
+				if !mess {
+					return elem, mess
+				}
+	
+				switch el1 := elem.(*list).data.(type) {
+				case int:
+					switch el2 := elem.(*list).nextdata.data.(type) {
+					case int:
+						return el1 / el2, true
+					}
+				default:
+					return "arguments type is not int in func /", false
+				}
+	
+			} else if el1 == "=" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func =", false
+				} else if lenList(exp) > 3 {
+					return "too many arguments in func =", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
+				if !mess2 {
+					return elem2, mess2
+				}
+				switch el3 := elem.(type) {
+				case string:
+					switch el4 := elem2.(type) {
+					case string:
+						if el3 == el4 {
+							return "true", true
+						} else {
+							return "false", true
+						}
+					}
+	
+				}
+				switch el1 := elem.(type) {
+				case int:
+					switch el2 := elem2.(type) {
+					case int:
+						if el1 == el2 {
+							return "true", true
+						} else {
+							return "false", true
+						}
+					}
+				}
+				return "false", true
+			} else if el1 == "quote" {
+				if lenList(exp) < 1 {
+					return "not enough arguments in func quote", false
+				} else if lenList(exp) > 2 {
+					return "too many arguments in func quote", false
+				}
+				return exp.nextdata.data, true
+	
+			} else if el1 == "car" {
+	
+				if lenList(exp) < 2 {
+					//fmt.Println("len exp: ",lenList(exp) )
+					return "not enough arguments in func car", false
+				} else if lenList(exp) > 2 {
+					return "too many arguments in func car", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+	
+				switch el1 := elem.(type) {
+				case *list:
+					if lenList(el1) < 1 {
+						return "car to empty list -  cannot", false
+					}
+					return el1.data, true
+				default:
+					return "arguments type is not list in func car", false
+	
+				}
+			} else if el1 == "cdr" {
+				if lenList(exp) < 2 {
+					return "not enough arguments in func cdr", false
+				} else if lenList(exp) > 2 {
+					return "too many arguments in func cdr", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				switch el1 := elem.(type) {
+				case *list:
+					if lenList(el1) < 1 {
+						return "cdr to empty list -  cannot", false
+					}
+					return el1.nextdata, true
+				default:
+					return "arguments type is not list in func cdr", false
+				}
+			} else if el1 == "cons" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func cons", false
+				} else if lenList(exp) > 3 {
+					return "too many arguments in func cons", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				elem2, mess2 := eval(exp.nextdata.nextdata.data, dict)
+				if !mess2 {
+					return elem2, mess2
+				}
+	
+				//var el1 interface{} = elem
+				switch el2 := elem2.(type) {
+				case *list:
+					var tempList *list = &list{data: elem, nextdata: el2}
+					return tempList, true
+				default:
+					return "second argument type is not list in func cons", false
+				}
+	
+			} else if el1 == "list" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func list", false
+				}
+				elem, mess := evalList(exp.nextdata, dict)
+				if !mess {
+					return elem, mess
+				}
+				return elem, true
+			} else if el1 == "null" {
+				if lenList(exp) < 2 {
+					return "not enough arguments in func null", false
+				} else if lenList(exp) > 2 {
+					return "too many arguments in func null", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+	
+				switch el1 := elem.(type) {
+				case *list:
+					if lenList(el1) != 0 {
+						return "false", true
+					} else {
+						return "true", true
+					}
+				default:
+					return "arguments type is not list in func null", false
+				}
+	
+			} else if el1 == "define" {
+				if lenList(exp) < 2 {
+					return "not enough arguments in func define", false
+				}
+				switch el1 := exp.nextdata.data.(type) {
+				case string:
+					global[el1] = exp.nextdata.nextdata.data
+					return el1, true
+				}
+			} else if el1 == "let" {
+				if lenList(exp) < 2 {
+					return "not enough arguments in func let", false
+				} else if lenList(exp) > 2 {
+					return "too many arguments in func let", false
+				}
+				switch el1 := exp.nextdata.data.(type) {
+				case *list:
+					dict = mapCopy(dict)
+					for el1 != nil {
+						switch el2 := el1.data.(type) {
+						case *list:
+							switch el3 := el2.data.(type) {
+							case string:
+	
+								elem2, mess2 := eval(el2.nextdata.data, dict)
+								if !mess2 {
+									return elem2, mess2
+								}
+	
+								dict[el3] = elem2
+							}
+						}
+						el1 = el1.nextdata
+					}
+				default:
+					return "arguments type is not list in func let", false
+	
+				}
+				elem, mess := eval(exp.nextdata.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				return elem, true
 
+			} else if el1 == "progn" {
+				if lenList(exp) < 3 {
+					return "not enough arguments in func progn", false
+				}
+				for exp != nil {
+					fmt.Print("exp: ")
+					printList(exp)
+					fmt.Println("")
+					//evalList(exp,dict)
+	
+					if exp.nextdata != nil {
+						//temp, errSw :=
+						elem2, mess2 := eval(exp.data, dict)
+
+						if !mess2 {
+							return elem2, mess2
+						}
+						
+						
+						/* if !errSw {
+							return temp, false
+						}else { */
+						exp = exp.nextdata
+						//}
+	
+					} else {
+						elem, mess := eval(exp.data, dict)
+						
+						return elem, mess
+					}
+	
+				}
+			} else if el1 == "numberp" {
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+	
+				switch el1 := elem.(type) {
+				case int:
+	
+					_ = el1
+					return "true", true
+	
+				default:
+					return "false", true
+				}
+			} else if el1 == "symbolp" {
+				if lenList(exp) != 2 {
+					return "amount arguments simbolp != 2", false
+				}
+				elem, mess := eval(exp.nextdata.data, dict)
+				if !mess {
+					return elem, mess
+				}
+				switch el1 := elem.(type) {
+				case string:
+					_ = el1
+					return "true", true
+				}
+	
+				return "false", true
+			} else if el1 == "setq" {
+				fmt.Print("setq enter")
+				if lenList(exp) != 3 {
+					return "wrong amount of arguments != 3, in func setq", false
+				}
+				switch varName := exp.nextdata.data.(type) {
+				case string:
+					switch val := exp.nextdata.nextdata.data.(type) {
+					case interface{}:
+						elem2, mess2 := eval(val, dict)
+						if !mess2 {
+							return elem2, mess2
+						}
+						fmt.Println("elem2: ", elem2)
+						dict[varName] = elem2
+					}
+				default:
+					return "type formal arguments setq not  string", false
+				}
+			} else {
+				fmt.Print("chek function in global dict!!!!: ", global[el1])
 			j, err := global[el1]
 
 			if err == false {
-				//fmt.Print("сase string global false: ")
+				fmt.Print("сase string global false: ")
 				return "finction " + el1 + " not defined", false
-			}
+			} 
 
 			elem, mess := eval(&list{data: j, nextdata: exp.nextdata}, dict)
-			if !mess {
+			
 				return elem, mess
-
-			} else {
-
-				return elem, true
-
-			}
+		}
 		default:
 			return "wrong function, first element to list not function", false
 		}
-
+	
 	//cons 23 (1 2) -> (23 1 2)
 	case string:
 		if exp == "false" {
@@ -700,7 +742,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 		}
 		j, err := dict[exp]
 
-		if err != false {
+		if err == true {
 			return j, true
 		}
 
@@ -748,7 +790,7 @@ func main() {
 	if err != nil {
 		fmt.Print(err)
 	}
-	elem2, mess2 := parse(tokenize(string(data)))
+	elem2, mess2 := parse(tokenize(comments(string(data))))
 
 	fmt.Println(mess2, "\n")
 	if !mess2 {

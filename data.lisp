@@ -19,12 +19,12 @@
 		(if (= key (car(car lst)))
 		    (car(cdr(car lst)))
 		    (assoc(cdr lst) key)))))
-	(define evprogn(lambda(lst) 
+	(define evprogn(lambda(lst dict) 
 	    (if (null lst)
 		(quote())
 		(if(=(len lst) 1)
-		    lst
-		    (progn(eval(car  lst) dict)
+		    (eval(car lst) dict)
+		    (progn(eval(car lst) dict)
 		    (evprogn(cdr lst) dict))))))
 	(define evcond(lambda(lst dict)
 	    (if (null lst)
@@ -32,6 +32,7 @@
 		(if (=(eval(car(cdr lst)) dict) false)
 		    (evcond(cdr lst) dict)
 		    (eval(car(cdr(car lst))) dict)))))
+		    
 	(define eval(lambda(lst dict)
 	   	(cond((numberp lst) lst)
 	   	    ((symbolp lst) (assoc dict lst)) 
@@ -45,13 +46,14 @@
 			((= (car lst) (quote cdr)) (cdr(eval(car (cdr lst)) dict)))
 			((= (car lst) (quote list)) (evlis(cdr lst) dict))
 			((= (car lst) (quote cond)) (evcond (cdr lst) dict))
-			((= (car (car lst)) (quote lambda)) (eval(car(cdr(cdr(car lst))))(pairlis(car(cdr(car lst)))(evlis(cdr lst) dict))))
 			((= (car lst) (quote progn))(evprogn(cdr lst) dict))
-			((= (car lst) (quote if)) (if(eval(car(cdr lst)) dict) (eval(car(cdr(cdr  lst))) dict)(eval(car(cdr(cdr(cdr lst)))) dict))))))
-			
+			((= (car lst) (quote if)) (if(eval(car(cdr lst)) dict) (eval(car(cdr(cdr  lst))) dict)(eval(car(cdr(cdr(cdr lst)))) dict)))
+			((= (car (car lst)) (quote lambda)) (eval(car(cdr(cdr(car lst))))(pairlis(car(cdr(car lst)))(evlis(cdr lst) dict)))))))
 	(eval(quote(progn (+ 1 2) (+ 3 4))) (quote())))
 	
 	
 	
+	;(+ 1 2)
+	((lambda (x) (progn(set x 42)(+ x 1))) 13)
 	
 	
