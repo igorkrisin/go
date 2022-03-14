@@ -597,7 +597,11 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				}
 				switch el1 := exp.nextdata.data.(type) {
 				case string:
-					global[el1] = exp.nextdata.nextdata.data
+					elem, mess := eval(exp.nextdata.nextdata.data, dict)
+					if !mess {
+						return elem, mess
+					}
+					global[el1] = elem
 					return el1, true
 				}
 			} else if el1 == "let" {
@@ -639,6 +643,7 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				if lenList(exp) < 3 {
 					return "not enough arguments in func progn", false
 				}
+				exp = exp.nextdata
 				for exp != nil {
 					fmt.Print("exp: ")
 					printList(exp)
@@ -710,8 +715,17 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 						if !mess2 {
 							return elem2, mess2
 						}
-						fmt.Println("elem2: ", elem2)
-						dict[varName] = elem2
+						val, flag := dict[varName]
+						valGl, flagGl := global[varName]
+						
+						if flag {
+							dict[varName] = elem2
+						} else if flagGl { 
+							global[varName] = elem2
+							_ = valGl
+						} else {
+							return "variable " + varName + " not define", false
+						}	
 					}
 				default:
 					return "type formal arguments setq not  string", false

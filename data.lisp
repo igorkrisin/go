@@ -32,7 +32,7 @@
 		(if (=(eval(car(cdr lst)) dict) false)
 		    (evcond(cdr lst) dict)
 		    (eval(car(cdr(car lst))) dict)))))
-		    
+	(define globlst (quote()))
 	(define eval(lambda(lst dict)
 	   	(cond((numberp lst) lst)
 	   	    ((symbolp lst) (assoc dict lst)) 
@@ -48,12 +48,14 @@
 			((= (car lst) (quote cond)) (evcond (cdr lst) dict))
 			((= (car lst) (quote progn))(evprogn(cdr lst) dict))
 			((= (car lst) (quote if)) (if(eval(car(cdr lst)) dict) (eval(car(cdr(cdr  lst))) dict)(eval(car(cdr(cdr(cdr lst)))) dict)))
+			((= (car lst) (quote define)) (setq globlst (cons (list(car(cdr lst)) (car(cdr(cdr lst)))) globlst)))
 			((= (car (car lst)) (quote lambda)) (eval(car(cdr(cdr(car lst))))(pairlis(car(cdr(car lst)))(evlis(cdr lst) dict)))))))
-	(eval(quote(progn (+ 1 2) (+ 3 4))) (quote())))
+	    globlst) 
+	 ;(eval(quote(progn(define x 5)(+ 5 x))) (quote()))) 
 	
 	
 	
 	;(+ 1 2)
-	((lambda (x) (progn(set x 42)(+ x 1))) 13)
+	
 	
 	
