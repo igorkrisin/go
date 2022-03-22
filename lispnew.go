@@ -592,18 +592,31 @@ func eval(expr interface{}, dict map[string]interface{}) (interface{}, bool) {
 				}
 	
 			} else if el1 == "define" {
+				//fmt.Println("DEFINE!!!")
 				if lenList(exp) < 2 {
 					return "not enough arguments in func define", false
 				}
+				//fmt.Println("el1: ",el1)
+				//fmt.Println("el1: ",exp.nextdata.data)
 				switch el1 := exp.nextdata.data.(type) {
 				case string:
+					fmt.Println("elem: ",exp.nextdata.nextdata.data)
 					elem, mess := eval(exp.nextdata.nextdata.data, dict)
 					if !mess {
 						return elem, mess
 					}
+					printList(elem)
 					global[el1] = elem
+					fmt.Println("global[el1]: ",global[el1])
 					return el1, true
+				case list:
+					fmt.Println("LIST!!!")
 				}
+			
+			} else if el1 == "lambda" {
+			
+			    return exp, true
+			
 			} else if el1 == "let" {
 				if lenList(exp) < 2 {
 					return "not enough arguments in func let", false

@@ -32,10 +32,14 @@
 		(if (=(eval(car(cdr lst)) dict) false)
 		    (evcond(cdr lst) dict)
 		    (eval(car(cdr(car lst))) dict)))))
+	(define append(lambda (bs ys)
+            (if (null bs)
+                ys
+                (cons (car bs)(append (cdr bs)ys)))))
 	(define globlst (quote()))
 	(define eval(lambda(lst dict)
 	   	(cond((numberp lst) lst)
-	   	    ((symbolp lst) (assoc dict lst)) 
+	   	    ((symbolp lst) (assoc (append dict globlst) lst))
 	   		((= (car lst) (quote +)) (+ (eval(car(cdr lst)) dict) (eval(car(cdr(cdr lst))) dict)))
 	   		((= (car lst) (quote -)) (- (eval(car(cdr lst)) dict) (eval(car(cdr(cdr lst))) dict)))
 	   		((= (car lst) (quote *)) (* (eval(car(cdr lst)) dict) (eval(car(cdr(cdr lst))) dict)))
@@ -49,9 +53,13 @@
 			((= (car lst) (quote progn))(evprogn(cdr lst) dict))
 			((= (car lst) (quote if)) (if(eval(car(cdr lst)) dict) (eval(car(cdr(cdr  lst))) dict)(eval(car(cdr(cdr(cdr lst)))) dict)))
 			((= (car lst) (quote define)) (setq globlst (cons (list(car(cdr lst)) (car(cdr(cdr lst)))) globlst)))
-			((= (car (car lst)) (quote lambda)) (eval(car(cdr(cdr(car lst))))(pairlis(car(cdr(car lst)))(evlis(cdr lst) dict)))))))
-	    globlst) 
+			((= (car (car lst)) (quote lambda)) (eval(car(cdr(cdr(car lst))))(pairlis(car(cdr(car lst)))(evlis(cdr lst) dict))))))) 
+	(eval(progn(define len (lambda (y)
+    	    (if (null y)
+    	    0
+    	    (+ (len(cdr y)) 1)))) (len (quote(a b c d)))) (quote())))
 	 ;(eval(quote(progn(define x 5)(+ 5 x))) (quote()))) 
+	 
 	
 	
 	

@@ -1,1 +1,1 @@
-(cdr(quote()))
+(lambda (x)x)
